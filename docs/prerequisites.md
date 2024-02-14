@@ -1,5 +1,15 @@
 # Prerequisites
 
+## AWS Marketplace subscriptions
+
+### [https://aws.amazon.com/marketplace/pp/prodview-qykvcpnstrlzi?sr=0-2&ref_=beagle&applicationId=AWSMPContessa](Zebrunner Selenium Grid Agent)
+
+Linux based ECS optimized instance with embedded Zebrunner tuning for scalable and reliable browser images usage
+
+### [https://aws.amazon.com/marketplace/pp/prodview-wmwdyq54i36jy?sr=0-4&ref_=beagle&applicationId=AWSMPContessa](Zebrunner Selenium Grid Agent - Windows)
+
+Windows based ECS optimized instance with embedded Zebrunner tuning for scalable and reliable browser images usage
+
 ## E3S instance
 
 ### Hardware
