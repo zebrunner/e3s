@@ -1,5 +1,5 @@
 version: "3.8"
-name: e3s
+name: esg
 services:
   db:
     image: postgres:15.3-bullseye
@@ -30,8 +30,6 @@ services:
   redis:
     image: redis:6.2.6
     container_name: redis
-    environment:
-      POSTGRES_PASSWORD: postgres
     restart: always
     networks:
       - data-network
