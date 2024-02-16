@@ -3,8 +3,8 @@
 Zebrunner Elastic Executor Engine Service
 
 Scalable CI/CD implementation for automating any kind of workflows including
- * [https://zebrunner.com/selenium-grid](Zebrunner Selenium Grid)
- * [https://zebrunner.com/cyserver](Zebrunner CyServer)
+ * [Zebrunner Selenium Grid](https://zebrunner.com/selenium-grid)
+ * [Zebrunner CyServer](https://zebrunner.com/cyserver)
  * Generic CI/CD automation
 
 ## Features
@@ -29,7 +29,7 @@ Suitable for personal usage and in big clusters:
 * **Browser consumption API** working out of the box
 * Fully **isolated** and **reproducible** environment
 
-### Documentation 
+## Documentation 
 * [Prerequisites](docs/prerequisites.md)
 * [Capabilities](docs/capabilities.md)
 * [Errors](docs/errors.md)
