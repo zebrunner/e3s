@@ -1,0 +1,13 @@
+{
+   "autoScalingGroupProvider": {
+      "autoScalingGroupArn": "{autoscalingArn}",
+      "managedScaling": {
+         "status": "ENABLED",
+         "targetCapacity": 100,
+         "minimumScalingStepSize": 1,
+         "maximumScalingStepSize": 100,
+         "instanceWarmupPeriod": 300
+      },
+      "managedTerminationProtection": "DISABLED"
+   }
+}

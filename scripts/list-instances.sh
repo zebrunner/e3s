@@ -19,7 +19,7 @@ readarray -t containerInstancesArns < <(echo ${CONTAINER_INSTANCES} | jq -r '.[]
 containerInstances=
 for containerInstanceArn in "${containerInstancesArns[@]}"; do
   # example of the containerInstanceArn:
-  # arn:aws:ecs:us-east-1:659932254483:container-instance/esg-dev/d085f4e3d2254973beba21d11d7ad105
+  # arn:aws:ecs:us-east-1:659932254483:container-instance/e3s-dev/d085f4e3d2254973beba21d11d7ad105
   if [ -z "$containerInstances" ]; then
     containerInstances="$containerInstanceArn"
   else

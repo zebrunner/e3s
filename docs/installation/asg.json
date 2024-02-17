@@ -1,0 +1,37 @@
+{
+    "MixedInstancesPolicy": {
+        "LaunchTemplate": {
+            "LaunchTemplateSpecification": {
+                "LaunchTemplateName": "e3s-{env}-launch-template",
+                "Version": "$Latest"
+            },
+            "Overrides": [
+                {
+                    "InstanceType": "c5a.4xlarge",
+                    "WeightedCapacity": "1"
+                },
+                {
+                    "InstanceType": "c5a.8xlarge",
+                    "WeightedCapacity": "2"
+                }
+            ]
+        },
+        "InstancesDistribution": {
+            "OnDemandAllocationStrategy": "prioritized",
+            "OnDemandPercentageAboveBaseCapacity": 100
+        }
+    },
+    "MinSize": 1,
+    "MaxSize": 30,
+    "DesiredCapacity": 1,
+    "DefaultCooldown": 10,
+    "AvailabilityZones": [ "{zones}" ], 
+    "HealthCheckType": "EC2", 
+    "HealthCheckGracePeriod": 10, 
+    "VPCZoneIdentifier": "{subnets}",
+    "TerminationPolicies": [ 
+        "AllocationStrategy" 
+    ],
+    "NewInstancesProtectedFromScaleIn": true, 
+    "ServiceLinkedRoleARN": "arn:aws:iam::659932254483:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"
+} 
