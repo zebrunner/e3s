@@ -20,7 +20,7 @@
 
 5. Disable scaling policy
 
-* aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{env}-asg --policy-name ECSManagedAutoScalingPolicy-1b46b90d-0903-4fa9-9bcc-acb6cf93e713 --policy-type TargetTrackingScaling --target-tracking-configuration "{ \"CustomizedMetricSpecification\": { \"MetricName\": \"CapacityProviderReservation\", \"Namespace\": \"AWS/ECS/ManagedScaling\", \"Dimensions\": [{ \"Name\": \"CapacityProviderName\", \"Value\": \"e3s-{env}-capacityprovider\" }, { \"Name\": \"ClusterName\", \"Value\": \"e3s-{env}\"}], \"Statistic\": \"Average\"}, \"TargetValue\": 100.0, \"DisableScaleIn\": false }" --no-enabled
+* aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{env}-asg --policy-name {ecs-policy-name} --policy-type TargetTrackingScaling --target-tracking-configuration "{ \"CustomizedMetricSpecification\": { \"MetricName\": \"CapacityProviderReservation\", \"Namespace\": \"AWS/ECS/ManagedScaling\", \"Dimensions\": [{ \"Name\": \"CapacityProviderName\", \"Value\": \"e3s-{env}-capacityprovider\" }, { \"Name\": \"ClusterName\", \"Value\": \"e3s-{env}\"}], \"Statistic\": \"Average\"}, \"TargetValue\": 100.0, \"DisableScaleIn\": false }" --no-enabled
                                                                                     
 6. [Optional] Add crons for min/max capacity upgrade
 
