@@ -58,11 +58,11 @@ Windows based ECS optimized instance with embedded Zebrunner tuning for scalable
                 "ecs:UpdateContainerInstancesState"
             ],
             "Resource": [
-                "arn:aws:ecs:${Region}:${Account}:container-instance/esg-${env}/*",
-                "arn:aws:ecs:${Region}:${Account}:task/esg-${env}/*",
-                "arn:aws:ecs:${Region}:${Account}:cluster/esg-${env}",
+                "arn:aws:ecs:${Region}:${Account}:container-instance/e3s-${env}/*",
+                "arn:aws:ecs:${Region}:${Account}:task/e3s-${env}/*",
+                "arn:aws:ecs:${Region}:${Account}:cluster/e3s-${env}",
                 "arn:aws:ecs:${Region}:${Account}:task-definition/${env}-*",
-                "arn:aws:ecs:${Region}:${Account}:capacity-provider/esg-${env}-*"
+                "arn:aws:ecs:${Region}:${Account}:capacity-provider/e3s-${env}-*"
             ]
         },
         {
@@ -73,7 +73,7 @@ Windows based ECS optimized instance with embedded Zebrunner tuning for scalable
                 "autoscaling:SetInstanceProtection",
                 "autoscaling:SetDesiredCapacity"
             ],
-            "Resource": "arn:aws:autoscaling:${Region}:${Account}:autoScalingGroup:*:autoScalingGroupName/esg-${env}-*"
+            "Resource": "arn:aws:autoscaling:${Region}:${Account}:autoScalingGroup:*:autoScalingGroupName/e3s-${env}-*"
         },
         {
             "Sid": "ELB",
@@ -82,7 +82,7 @@ Windows based ECS optimized instance with embedded Zebrunner tuning for scalable
                 "elasticloadbalancing:RegisterTargets",
                 "elasticloadbalancing:DeregisterTargets"
             ],
-            "Resource": "arn:aws:elasticloadbalancing:${Region}:${Account}:targetgroup/esg-${env}-*"
+            "Resource": "arn:aws:elasticloadbalancing:${Region}:${Account}:targetgroup/e3s-${env}-*"
         },
         {
             "Sid": "S3",
@@ -102,7 +102,7 @@ Windows based ECS optimized instance with embedded Zebrunner tuning for scalable
             "Action": [
                 "iam:passRole"
             ],
-            "Resource": "arn:aws:iam::${Account}:role/esg-${env}-task-role"
+            "Resource": "arn:aws:iam::${Account}:role/e3s-${env}-task-role"
         }
     ]
 }
@@ -144,8 +144,8 @@ Windows based ECS optimized instance with embedded Zebrunner tuning for scalable
                 "ecs:Poll"
             ],
             "Resource": [
-                "arn:aws:ecs:${Region}:${Account}:cluster/esg-${env}",
-                "arn:aws:ecs:${Region}:${Account}:container-instance/esg-${env}/*"
+                "arn:aws:ecs:${Region}:${Account}:cluster/e3s-${env}",
+                "arn:aws:ecs:${Region}:${Account}:container-instance/e3s-${env}/*"
             ]
         }
     ]
