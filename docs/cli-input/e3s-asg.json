@@ -2,7 +2,7 @@
     "MixedInstancesPolicy": {
         "LaunchTemplate": {
             "LaunchTemplateSpecification": {
-                "LaunchTemplateName": "e3s-{env}-launch-template",
+                "LaunchTemplateName": "e3s-{Env}-launch-template",
                 "Version": "$Latest"
             },
             "Overrides": [
@@ -33,5 +33,5 @@
         "AllocationStrategy" 
     ],
     "NewInstancesProtectedFromScaleIn": true, 
-    "ServiceLinkedRoleARN": "arn:aws:iam::659932254483:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"
+    "ServiceLinkedRoleARN": "arn:aws:iam::{Account}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"
 } 
