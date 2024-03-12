@@ -1,6 +1,6 @@
 {
    "autoScalingGroupProvider": {
-      "autoScalingGroupArn": "{autoscalingArn}",
+      "autoScalingGroupArn": "arn:aws:autoscaling:{Region}:{Account}:autoScalingGroup:{Uuid}:autoScalingGroupName/e3s-{Env}-asg",
       "managedScaling": {
          "status": "ENABLED",
          "targetCapacity": 100,
