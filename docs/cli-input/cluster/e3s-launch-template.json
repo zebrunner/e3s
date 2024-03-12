@@ -22,7 +22,7 @@
         },
         "DisableApiTermination": false,
         "InstanceInitiatedShutdownBehavior": "terminate",
-        "UserData": "{base64 encrypted data for linux or windows}",
+        "UserData": "{base64 encoded data for linux or windows}",
         "IamInstanceProfile": {
             "Arn": "arn:aws:iam::{Account}:instance-profile/e3s-{Env}-agent-role"
         },

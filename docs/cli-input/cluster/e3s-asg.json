@@ -7,11 +7,11 @@
             },
             "Overrides": [
                 {
-                    "InstanceType": "c5a.4xlarge",
+                    "InstanceType": "c5a.2xlarge",
                     "WeightedCapacity": "1"
                 },
                 {
-                    "InstanceType": "c5a.8xlarge",
+                    "InstanceType": "c5a.4xlarge",
                     "WeightedCapacity": "2"
                 }
             ]
@@ -25,10 +25,10 @@
     "MaxSize": 30,
     "DesiredCapacity": 1,
     "DefaultCooldown": 10,
-    "AvailabilityZones": [ "{zones}" ], 
+    "AvailabilityZones": [ "{Zones}" ], 
     "HealthCheckType": "EC2", 
     "HealthCheckGracePeriod": 10, 
-    "VPCZoneIdentifier": "{subnets}",
+    "VPCZoneIdentifier": "{Subnets}",
     "TerminationPolicies": [ 
         "AllocationStrategy" 
     ],
