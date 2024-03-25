@@ -17,17 +17,21 @@ Windows based ECS optimized instance with embedded Zebrunner tuning for scalable
 
 ### AWS IAM Roles
 
-1. Create e3s role and policy
+1. Create e3s role, policy and instance-profile
 
 * aws iam create-role --role-name e3s-{Env}-role --assume-role-policy-document [file://e3s-ec2-assume-document.json](cli-input/roles/e3s-ec2-assume-document.json)
 * aws iam create-policy --policy-name e3s-{Env}-policy --policy-document [file://e3s-policy.json](cli-input/roles/e3s-policy.json)
 * aws iam attach-role-policy --role-name e3s-{Env}-role --policy-arn arn:aws:iam::{Account}:policy/e3s-{Env}-policy
+* aws iam create-instance-profile --instance-profile-name e3s-{Env}-role
+* aws iam add-role-to-instance-profile --instance-profile-name e3s-{Env}-role --role-name e3s-{Env}-role 
 
-2. Create e3s agent role and policy
+2. Create e3s agent role, policy and instance-profile
 
 * aws iam create-role --role-name e3s-{Env}-agent-role --assume-role-policy-document [file://e3s-ec2-assume-document.json](cli-input/roles/e3s-ec2-assume-document.json)
 * aws iam create-policy --policy-name e3s-{Env}-agent-policy --policy-document [file://e3s-agent-policy.json](cli-input/roles/e3s-agent-policy.json)
 * aws iam attach-role-policy --role-name e3s-{Env}-agent-role --policy-arn arn:aws:iam::{Account}:policy/e3s-{Env}-agent-policy
+* aws iam create-instance-profile --instance-profile-name e3s-{Env}-agent-role
+* aws iam add-role-to-instance-profile --instance-profile-name e3s-{Env}-agent-role --role-name e3s-{Env}-agent-role
 
 3. Create e3s task role and policy
 
