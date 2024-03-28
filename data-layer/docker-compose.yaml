@@ -18,7 +18,7 @@ services:
     networks:
       - data-network
   e3s-migration:
-    image: public.ecr.aws/zebrunner/e3s-migration:latest
+    image: public.ecr.aws/zebrunner/e3s-migration:1.0
     container_name: e3s-migration
     environment:
       DATABASE: postgres://postgres:postgres@db/postgres?sslmode=disable
