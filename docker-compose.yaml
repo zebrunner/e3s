@@ -10,8 +10,6 @@ services:
     networks:
       - service-network
     restart: always
-    # volumes:
-    #   - "${HOME}/.aws:/root/.aws"
   router_1:
     container_name: router_1
     image: public.ecr.aws/zebrunner/router:2.7
@@ -28,8 +26,6 @@ services:
     networks:
       - service-network
     restart: always
-    #    volumes:
-    #      - "${HOME}/.aws:/root/.aws"
   router_2:
     container_name: router_2
     image: public.ecr.aws/zebrunner/router:2.7
@@ -46,8 +42,6 @@ services:
     networks:
       - service-network
     restart: always
-    #    volumes:
-    #      - "${HOME}/.aws:/root/.aws"
 networks:
   service-network:
     external: true
