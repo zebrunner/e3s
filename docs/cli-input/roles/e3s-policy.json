@@ -11,6 +11,7 @@
                 "ec2:DescribeInstanceStatus",
                 "ec2:DescribeInstanceTypes",
                 "elasticloadbalancing:DescribeTargetGroups",
+                "elasticloadbalancing:DescribeLoadBalancers",
                 "autoscaling:DescribeAutoScalingGroups",
                 "autoscaling:DescribeAutoScalingInstances"
             ],
