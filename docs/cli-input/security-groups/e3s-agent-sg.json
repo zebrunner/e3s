@@ -5,7 +5,7 @@
             "IpProtocol": "tcp",
             "IpRanges": [
                 {
-                    "CidrIp": "",
+                    "CidrIp": "{e3s-server-ip}/32",
                     "Description": "docker port range to access from e3s server ip"
                 }
             ],
