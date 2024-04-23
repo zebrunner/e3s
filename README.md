@@ -30,6 +30,8 @@ Suitable for personal usage and in big clusters:
 * Fully **isolated** and **reproducible** environment
 
 ## Documentation 
+* [Prerequisites](docs/prerequisites.md)
 * [Installation](docs/installation.md)
+* [Cleanup](docs/cleanup.md)
 * [Capabilities](docs/capabilities.md)
 * [Errors](docs/errors.md)
