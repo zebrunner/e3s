@@ -1,0 +1,104 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "withoutConstraints",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:CreateCapacityProvider"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "ec2",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:CreateLaunchTemplate",
+                "ec2:CreateLaunchTemplateVersion",
+                "ec2:DeleteLaunchTemplate",
+                "ec2:DeleteLaunchTemplateVersion",
+                "ec2:RunInstances"
+            ],
+            "Resource": [
+                "*"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "ec2:Region": "us-east-?"
+                }
+            }
+        },
+        {
+            "Sid": "iamForAutoscaling",
+            "Effect": "Allow",
+            "Action": [
+                "iam:PassRole"
+            ],
+            "Resource": [
+                "arn:aws:iam::{Account}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"
+            ]
+        },
+        {
+            "Sid": "iamForLaunchTemplates",
+            "Effect": "Allow",
+            "Action": [
+                "iam:PassRole"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "iam:PassedToService": "ec2.amazonaws.com"
+                }
+            },
+            "Resource": [
+                "arn:aws:iam::{Account}:role/e3s-{Env}-agent-role"
+            ]
+        },
+        {
+            "Sid": "autoscaling",
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:CreateAutoScalingGroup",
+                "autoscaling:DeleteAutoScalingGroup",
+                "autoscaling:PutScalingPolicy",
+                "autoscaling:PutScheduledUpdateGroupAction",
+                "autoscaling:CreateOrUpdateTags"
+            ],
+            "Resource": "arn:aws:autoscaling:*:{Account}:autoScalingGroup:*:autoScalingGroupName/e3s-*"
+        },
+        {
+            "Sid": "ecs",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:CreateCluster",
+                "ecs:DeleteCluster",
+                "ecs:PutClusterCapacityProviders",
+                "ecs:DeleteCapacityProvider"
+            ],
+            "Resource": [
+                "arn:aws:ecs:*:{Account}:cluster/e3s-*",
+                "arn:aws:ecs:*:{Account}:capacity-provider/e3s-*"
+            ]
+        },
+        {
+            "Sid": "elbv2",
+            "Effect": "Allow",
+            "Action": [
+                "elasticloadbalancing:CreateLoadBalancer",
+                "elasticloadbalancing:DeleteLoadBalancer",
+                "elasticloadbalancing:CreateListener",
+                "elasticloadbalancing:DeleteListener",
+                "elasticloadbalancing:CreateTargetGroup",
+                "elasticloadbalancing:DeleteTargetGroup",
+                "elasticloadbalancing:RegisterTargets",
+                "elasticloadbalancing:DeregisterTargets",
+                "elasticloadbalancing:ModifyTargetGroupAttributes",
+                "elasticloadbalancing:ModifyListener"
+            ],
+            "Resource": [
+                "arn:aws:elasticloadbalancing:*:{Account}:loadbalancer/app/e3s-*",
+                "arn:aws:elasticloadbalancing:*:{Account}:targetgroup/e3s-*",
+                "arn:aws:elasticloadbalancing:*:{Account}:listener/app/e3s-*"
+            ]
+        }
+    ]
+}

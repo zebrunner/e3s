@@ -1,0 +1,18 @@
+{
+    "Protocol": "HTTP",
+    "ProtocolVersion": "HTTP1",
+    "Port": 4444,
+    "VpcId": "{VpcId}",
+    "HealthCheckProtocol": "HTTP",
+    "HealthCheckPort": "traffic-port",
+    "HealthCheckEnabled": true,
+    "HealthCheckPath": "/",
+    "HealthCheckIntervalSeconds": 30,
+    "HealthCheckTimeoutSeconds": 5,
+    "HealthyThresholdCount": 5,
+    "UnhealthyThresholdCount": 5,
+    "Matcher": {
+        "HttpCode": "200"
+    },
+    "TargetType": "instance"
+}

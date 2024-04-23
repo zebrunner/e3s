@@ -1,19 +1,19 @@
 {
     "LaunchTemplateData": {
-        "ImageId": "{zebrunner-agent-ami}",
+        "ImageId": "{zebrunner-agent-ami-windows}",
         "KeyName": "{key-name}",
         "EbsOptimized": true,
         "SecurityGroupIds": [
-            "{e3s-agent-security-group-id}"
+            "{e3s-agent-sg-id}"
         ],
         "BlockDeviceMappings": [
             {
-                "DeviceName": "/dev/xvdcz",
+                "DeviceName": "/dev/sda1",
                 "Ebs": {
-                    "VolumeSize": 70,
+                    "VolumeSize": 100,
                     "VolumeType": "gp3",
                     "DeleteOnTermination": true,
-                    "Encrypted": true
+                    "Encrypted": false
                 }
             }
         ],
@@ -22,7 +22,7 @@
         },
         "DisableApiTermination": false,
         "InstanceInitiatedShutdownBehavior": "terminate",
-        "UserData": "{base64 encoded data for linux or windows}",
+        "UserData": "{base64 encoded data for windows}",
         "IamInstanceProfile": {
             "Arn": "arn:aws:iam::{Account}:instance-profile/e3s-{Env}-agent-role"
         },

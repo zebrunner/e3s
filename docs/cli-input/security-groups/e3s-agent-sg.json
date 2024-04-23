@@ -1,0 +1,32 @@
+{
+    "IpPermissions": [
+        {
+            "FromPort": 32768,
+            "IpProtocol": "tcp",
+            "IpRanges": [
+                {
+                    "CidrIp": "",
+                    "Description": "docker port range to access from e3s server ip"
+                }
+            ],
+            "ToPort": 64536
+        },
+        {
+            "FromPort": 22,
+            "IpProtocol": "tcp",
+            "IpRanges": [
+                {
+                    "CidrIp": "0.0.0.0/0",
+                    "Description": "ssh port"
+                }
+            ],
+            "Ipv6Ranges": [
+                {
+                    "CidrIpv6": "::/0",
+                    "Description": "ssh port"
+                }
+            ],
+            "ToPort": 22
+        }
+    ]
+}
