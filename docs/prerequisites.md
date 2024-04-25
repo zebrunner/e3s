@@ -16,6 +16,10 @@ Security groups contain only inbound rules
 
 ### [Load balancer and e3s server security group](cli-input/security-groups/e3s-sg.json)
 
+## Artifacts storage
+
+### [S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
+
 ## [Optional] E3S user policies
  
 ### [Monitor policy](cli-input/security-groups/e3s-monitor-policy.json)

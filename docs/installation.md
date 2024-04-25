@@ -4,7 +4,7 @@
 
 ## AWS Infrastructure
 
-> Replace all {Env}, {Account}, {Region} vars in the next paragraph and corresponding json files
+> Replace all {Env}, {Account}, {Region}, {S3-bucket} vars in the next paragraph and corresponding json files
 
 ### AWS IAM Roles
 
@@ -156,7 +156,7 @@
 * AWS_LINUX_CAPACITY_PROVIDER=e3s-{Env}-capacityprovider - should be specified at least on of linux or windows values
 * AWS_WIN_CAPACITY_PROVIDER=e3s-{Env}-win-capacityprovider - should be specified at least on of linux or windows values
 * AWS_TARGET_GROUP=e3s-{Env}-tg - Target group name 
-* S3_BUCKET=zebrunner.{Env}-engine
+* S3_BUCKET={S3-bucket}
 * S3_REGION={Region}
 
 
