@@ -10,7 +10,7 @@ Windows based ECS optimized instance with embedded Zebrunner tuning for scalable
 
 ## AWS Security groups
 
-Security groups contain only inbound rules. 
+Security groups contain only inbound rules
 
 ### [Agent security group](cli-input/security-groups/e3s-agent-sg.json)
 
@@ -21,8 +21,8 @@ Security groups contain only inbound rules.
 ### [Monitor policy](cli-input/security-groups/e3s-monitor-policy.json)
 To view current state of e3s infrastructure
 
-### [Manage policy](cli-input/security-groups/e3s-manage-policy.json).
-To update desired capacity/terminate instances in autoscaling group etc. In addition to user should be attached Monitor policy.
+### [Manage policy](cli-input/security-groups/e3s-manage-policy.json)
+To update desired capacity/terminate instances in autoscaling group etc. In addition to user should be attached Monitor policy
 
-### [Deploy policy](cli-input/security-groups/e3s-deploy-policy.json).
-Policy for elb and cluster deploy/cleanup. In addition to user should be attached Monitor and Manage policies.
+### [Deploy policy](cli-input/security-groups/e3s-deploy-policy.json)
+Policy for elb and cluster deploy/cleanup. In addition to user should be attached Monitor and Manage policies
