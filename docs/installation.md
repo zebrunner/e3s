@@ -4,7 +4,7 @@
 
 ## AWS Infrastructure
 
-> Replace all {Env}, {Account}, {Region} vars in the next paragraph and corresponding json files. 
+> Replace all {Env}, {Account}, {Region} vars in the next paragraph and corresponding json files
 
 ### AWS IAM Roles
 
@@ -36,11 +36,11 @@
 
 1. Encode [user data](cli-input/cluster/e3s-linux-userdata.txt) to base64
 
-2. Create launch template. In [file://e3s-linux-launch-template.json](cli-input/cluster/e3s-linux-launch-template.json) file should be additionally specified Zebrunner Selenium Grid Agent Ami Id, Key Name, e3s-sg id and encoded userdata from previouse step.
+2. Create launch template. In [file://e3s-linux-launch-template.json](cli-input/cluster/e3s-linux-launch-template.json) file should be additionally specified Zebrunner Selenium Grid Agent Ami Id, Key Name, e3s-sg id and encoded userdata from previouse step
 * aws ec2 create-launch-template --launch-template-name e3s-{Env}-launch-template --cli-input-json [file://e3s-linux-launch-template.json](cli-input/cluster/e3s-linux-launch-template.json)
 * aws ec2 describe-launch-template-versions --launch-template-name e3s-{Env}-launch-template
 
-3. Create auto scaling group. Additionly in [file://e3s-asg.json](cli-input/cluster/e3s-asg.json) file should be specified Availability Zones, Subnets and compute optimized instance types (Recommended min instance type is c5a.2xlarge).
+3. Create auto scaling group. Additionly in [file://e3s-asg.json](cli-input/cluster/e3s-asg.json) file should be specified Availability Zones, Subnets and compute optimized instance types (Recommended min instance type is c5a.2xlarge)
 
 * aws autoscaling create-auto-scaling-group --auto-scaling-group-name e3s-{Env}-asg --cli-input-json [file://e3s-linux-asg.json](cli-input/cluster/e3s-linux-asg.json)
 * aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names e3s-{Env}-asg
@@ -51,14 +51,14 @@
 
 #### Windows
 
-1. Encode [user data](cli-input/cluster/e3s-windows-userdata.txt) to base64. Make sure that {VpcCidrBlock} is specified for -AwsvpcAdditionalLocalRoutes flag in windows userdata.
+1. Encode [user data](cli-input/cluster/e3s-windows-userdata.txt) to base64. Make sure that {VpcCidrBlock} is specified for -AwsvpcAdditionalLocalRoutes flag in windows userdata
 
-2. Create launch template. In [file://e3s-windows-launch-template.json](cli-input/cluster/e3s-windows-launch-template.json) file should be additionally specified Zebrunner Selenium Grid Windows Agent Ami Id, Key Name, e3s-sg id and encoded userdata from previouse step.
+2. Create launch template. In [file://e3s-windows-launch-template.json](cli-input/cluster/e3s-windows-launch-template.json) file should be additionally specified Zebrunner Selenium Grid Windows Agent Ami Id, Key Name, e3s-sg id and encoded userdata from previouse step
 
 * aws ec2 create-launch-template --launch-template-name e3s-{Env}-win-launch-template --cli-input-json [file://e3s-windows-launch-template.json](cli-input/cluster/e3s-windows-launch-template.json)
 * aws ec2 describe-launch-template-versions --launch-template-name e3s-{Env}-win-launch-template
 
-3. Create auto scaling group. Additionly in [file://e3s-windows-asg.json](cli-input/cluster/e3s-windows-asg.json) file should be specified Availability Zones, Subnets and compute optimized instance types (Recommended min instance type is c5a.2xlarge).
+3. Create auto scaling group. Additionly in [file://e3s-windows-asg.json](cli-input/cluster/e3s-windows-asg.json) file should be specified Availability Zones, Subnets and compute optimized instance types (Recommended min instance type is c5a.2xlarge)
 
 * aws autoscaling create-auto-scaling-group --auto-scaling-group-name e3s-{Env}-win-asg --cli-input-json [file://e3s-windows-asg.json](cli-input/cluster/e3s-windows-asg.json)
 * aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names e3s-{Env}-win-asg
@@ -89,7 +89,7 @@
 
 #### Load balancer
 
-1. Create load balancer. In [file://e3s-load-balancer.json](cli-input/cluster/e3s-load-balancer.json) file should be specified subnets and e3s-sg id.
+1. Create load balancer. In [file://e3s-load-balancer.json](cli-input/cluster/e3s-load-balancer.json) file should be specified subnets and e3s-sg id
 * aws elbv2 create-load-balancer --name e3s-{Env}-alb --cli-input-json [file://e3s-load-balancer.json](cli-input/cluster/e3s-load-balancer.json)
 
 2. Create target group. In [file://e3s-target-group.json](cli-input/cluster/e3s-target-group.json) file should be specified {VpcId}
@@ -123,7 +123,7 @@
 
 ### Env files
 
-> Supported env vars are differ from version to version for scaler and router images.
+> Supported env vars are differ from version to version for scaler and router images
 
 #### Scaler.env
 
@@ -136,11 +136,11 @@
 
 ##### Optional variables
 
-* RESERVE_INSTANCES_PERCENT - Additional weight capacity reservation percent. Default value = 0.25.
-* RESERVE_MAX_CAPACITY - Max number of additional weight capacity reservation. Default value = 5.
-* INSTANCE_COOLDOWN_TIMEOUT - Time after instance start when shutdown is prohibited on scale down in time.Duration format. Default value = 4 min.
-* EXCLUDE_BROWSERS - Excludes selected browser images from registering them as a task definition. Default value = empty.
-* LOG_LEVEL - Desired log level. Valid levels: `panic`, `fatal`, `error`, `warning`, `info`, `debug`, `trace`. Default value = debug.
+* RESERVE_INSTANCES_PERCENT - Additional weight capacity reservation percent. Default value = 0.25
+* RESERVE_MAX_CAPACITY - Max number of additional weight capacity reservation. Default value = 5
+* INSTANCE_COOLDOWN_TIMEOUT - Time after instance start when shutdown is prohibited on scale down in time.Duration format. Default value = 4 min
+* EXCLUDE_BROWSERS - Excludes selected browser images from registering them as a task definition. Default value = empty
+* LOG_LEVEL - Desired log level. Valid levels: `panic`, `fatal`, `error`, `warning`, `info`, `debug`, `trace`. Default value = debug
 * IDLE_TIMEOUT - Session idle timeout in time.Duration format. Default value = 1 min
 * MAX_TIMEOUT - Maximum valid task/session timeout in time.Duration format. Default value = 24 hours
 
@@ -153,8 +153,8 @@
 * USE_PUBLIC_IP=true/false. Default value = false
 * AWS_TASK_ROLE=e3s-{Env}-task-role
 * ZEBRUNNER_ENV={Env}
-* AWS_LINUX_CAPACITY_PROVIDER=e3s-{Env}-capacityprovider - should be specified at least on of linux or windows values.
-* AWS_WIN_CAPACITY_PROVIDER=e3s-{Env}-win-capacityprovider - should be specified at least on of linux or windows values.
+* AWS_LINUX_CAPACITY_PROVIDER=e3s-{Env}-capacityprovider - should be specified at least on of linux or windows values
+* AWS_WIN_CAPACITY_PROVIDER=e3s-{Env}-win-capacityprovider - should be specified at least on of linux or windows values
 * AWS_TARGET_GROUP=e3s-{Env}-tg - Target group name 
 * S3_BUCKET=zebrunner.{Env}-engine
 * S3_REGION={Region}
@@ -162,8 +162,8 @@
 
 ##### Optional variables
 
-* EXCLUDE_BROWSERS - Excludes selected browser images from registering them as a task definition. Default value = empty.
-* LOG_LEVEL - Desired log level. Valid levels: `panic`, `fatal`, `error`, `warning`, `info`, `debug`, `trace`. Default value = debug.
+* EXCLUDE_BROWSERS - Excludes selected browser images from registering them as a task definition. Default value = empty
+* LOG_LEVEL - Desired log level. Valid levels: `panic`, `fatal`, `error`, `warning`, `info`, `debug`, `trace`. Default value = debug
 * IDLE_TIMEOUT - Session idle timeout in time.Duration format. Default value = 1 min
 * MAX_TIMEOUT - Maximum valid task/session timeout in time.Duration format. Default value = 24 hours
 * SERVICE_STARTUP_TIMEOUT - Task and session startup timeout in time.Duration format. Default value = 10 min
