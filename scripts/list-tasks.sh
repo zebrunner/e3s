@@ -19,7 +19,7 @@ readarray -t tasksArns < <(echo ${TASKS} | jq -r '.[]')
 tasks=
 for taskArn in "${tasksArns[@]}"; do
   # example of the taskArn:
-  # arn:aws:ecs:us-east-1:659932254483:task/e3s-dev/50d8fcf7a7e24adeb4dca2fda5b600d7
+  # arn:aws:ecs:{Region}:{Account}:task/e3s-{Env}/50d8fcf7a7e24adeb4dca2fda5b600d7
   if [ -z "$tasks" ]; then
     tasks="$taskArn"
   else
