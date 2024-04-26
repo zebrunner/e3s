@@ -6,33 +6,7 @@
 
 > Replace all {Env}, {Account}, {Region}, {S3-bucket} vars in the next paragraph and corresponding json files
 
-### AWS IAM Roles
-
-1. Create e3s role, policy and instance-profile
-
-* aws iam create-role --role-name e3s-{Env}-role --assume-role-policy-document [file://e3s-ec2-assume-document.json](cli-input/roles/e3s-ec2-assume-document.json)
-* aws iam create-policy --policy-name e3s-{Env}-policy --policy-document [file://e3s-policy.json](cli-input/roles/e3s-policy.json)
-* aws iam attach-role-policy --role-name e3s-{Env}-role --policy-arn arn:aws:iam::{Account}:policy/e3s-{Env}-policy
-* aws iam create-instance-profile --instance-profile-name e3s-{Env}-role
-* aws iam add-role-to-instance-profile --instance-profile-name e3s-{Env}-role --role-name e3s-{Env}-role 
-
-2. Create e3s agent role, policy and instance-profile
-
-* aws iam create-role --role-name e3s-{Env}-agent-role --assume-role-policy-document [file://e3s-ec2-assume-document.json](cli-input/roles/e3s-ec2-assume-document.json)
-* aws iam create-policy --policy-name e3s-{Env}-agent-policy --policy-document [file://e3s-agent-policy.json](cli-input/roles/e3s-agent-policy.json)
-* aws iam attach-role-policy --role-name e3s-{Env}-agent-role --policy-arn arn:aws:iam::{Account}:policy/e3s-{Env}-agent-policy
-* aws iam create-instance-profile --instance-profile-name e3s-{Env}-agent-role
-* aws iam add-role-to-instance-profile --instance-profile-name e3s-{Env}-agent-role --role-name e3s-{Env}-agent-role
-
-3. Create e3s task role and policy
-
-* aws iam create-role --role-name e3s-{Env}-task-role --assume-role-policy-document [file://e3s-ecs-assume-document.json](cli-input/roles/e3s-ecs-assume-document.json)
-* aws iam create-policy --policy-name e3s-{Env}-task-policy --policy-document [file://e3s-task-policy.json](cli-input/roles/e3s-task-policy.json)
-* aws iam attach-role-policy --role-name e3s-{Env}-task-role --policy-arn arn:aws:iam::{Account}:policy/e3s-{Env}-task-policy 
-
-### AWS Cluster
-
-#### Linux
+### Linux
 
 1. Encode [user data](cli-input/cluster/e3s-linux-userdata.txt) to base64
 
@@ -49,7 +23,7 @@
 * aws ecs create-capacity-provider --name e3s-{Env}-capacityprovider --cli-input-json [file://e3s-linux-capacityprovider.json](cli-input/cluster/e3s-linux-capacityprovider.json)
 * aws ecs describe-capacity-providers --capacity-providers e3s-{Env}-capacityprovider
 
-#### Windows
+### Windows
 
 1. Encode [user data](cli-input/cluster/e3s-windows-userdata.txt) to base64. Make sure that {VpcCidrBlock} is specified for -AwsvpcAdditionalLocalRoutes flag in windows userdata
 
@@ -67,13 +41,13 @@
 * aws ecs create-capacity-provider --name e3s-{Env}-win-capacityprovider --cli-input-json [file://e3s-windows-capacityprovider.json](cli-input/cluster/e3s-windows-capacityprovider.json)
 * aws ecs describe-capacity-providers --capacity-providers e3s-{Env}-win-capacityprovider
 
-#### Cluster
+### Cluster
 
 1. Create cluster
 * aws ecs create-cluster --cluster-name e3s-{Env} --capacity-providers e3s-{Env}-capacityprovider e3s-{Env}-win-capacityprovider --default-capacity-provider-strategy capacityProvider=e3s-{Env}-capacityprovider,weight=1
 * aws ecs describe-clusters --clusters e3s-{Env} --include ATTACHMENTS
 
-2. Disable scaling policy
+2. Disable scaling policy. Replace {Uuid} with actual policy value.
 * aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{Env}-asg --policy-name ECSManagedAutoScalingPolicy-{Uuid} --policy-type TargetTrackingScaling --target-tracking-configuration "{ \"CustomizedMetricSpecification\": { \"MetricName\": \"CapacityProviderReservation\", \"Namespace\": \"AWS/ECS/ManagedScaling\", \"Dimensions\": [{ \"Name\": \"CapacityProviderName\", \"Value\": \"e3s-{Env}-capacityprovider\" }, { \"Name\": \"ClusterName\", \"Value\": \"e3s-{Env}\"}], \"Statistic\": \"Average\"}, \"TargetValue\": 100.0, \"DisableScaleIn\": false }" --no-enabled
 * aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{Env}-win-asg --policy-name ECSManagedAutoScalingPolicy-{Uuid} --policy-type TargetTrackingScaling --target-tracking-configuration "{ \"CustomizedMetricSpecification\": { \"MetricName\": \"CapacityProviderReservation\", \"Namespace\": \"AWS/ECS/ManagedScaling\", \"Dimensions\": [{ \"Name\": \"CapacityProviderName\", \"Value\": \"e3s-{Env}-win-capacityprovider\" }, { \"Name\": \"ClusterName\", \"Value\": \"e3s-{Env}\"}], \"Statistic\": \"Average\"}, \"TargetValue\": 100.0, \"DisableScaleIn\": false }" --no-enabled
 
@@ -87,10 +61,11 @@
 * * aws autoscaling put-scheduled-update-group-action --auto-scaling-group-name e3s-{Env}-asg --scheduled-action-name nightly-mode --recurrence "0 18 * * *" --min-size 0 --max-size 30 --time-zone Etc/UTC
 * * aws autoscaling put-scheduled-update-group-action --auto-scaling-group-name e3s-{Env}-win-asg --scheduled-action-name nightly-mode --recurrence "0 18 * * *" --min-size 0 --max-size 30 --time-zone Etc/UTC
 
-#### Load balancer
+### Load balancer
 
 1. Create load balancer. In [file://e3s-load-balancer.json](cli-input/cluster/e3s-load-balancer.json) file should be specified subnets and e3s-sg id
 * aws elbv2 create-load-balancer --name e3s-{Env}-alb --cli-input-json [file://e3s-load-balancer.json](cli-input/cluster/e3s-load-balancer.json)
+* aws elbv2 describe-load-balancer --name e3s-{Env}-alb
 
 2. Create target group. In [file://e3s-target-group.json](cli-input/cluster/e3s-target-group.json) file should be specified {VpcId}
 * aws elbv2 create-target-group --name e3s-{Env}-tg --cli-input-json [file://e3s-target-group.json](cli-input/cluster/e3s-target-group.json)
