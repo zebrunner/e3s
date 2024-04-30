@@ -1,0 +1,53 @@
+{
+    "IpPermissions": [
+        {
+            "FromPort": 4444,
+            "IpProtocol": "tcp",
+            "IpRanges": [
+                {
+                    "CidrIp": "0.0.0.0/0",
+                    "Description": "router port"
+                }
+            ],
+            "ToPort": 4444
+        },
+        {
+            "FromPort": 4445,
+            "IpProtocol": "tcp",
+            "IpRanges": [
+                {
+                    "CidrIp": "0.0.0.0/0",
+                    "Description": "router port"
+                }
+            ],
+            "ToPort": 4445
+        },
+        {
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "IpRanges": [
+                {
+                    "CidrIp": "0.0.0.0/0"
+                }
+            ],
+            "ToPort": 443
+        },
+        {
+            "FromPort": 22,
+            "IpProtocol": "tcp",
+            "IpRanges": [
+                {
+                    "CidrIp": "0.0.0.0/0",
+                    "Description": "ssh port"
+                }
+            ],
+            "Ipv6Ranges": [
+                {
+                    "CidrIpv6": "::/0",
+                    "Description": "ssh port"
+                }
+            ],
+            "ToPort": 22
+        }
+    ]
+}

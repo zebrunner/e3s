@@ -54,7 +54,7 @@ i=0
 containerInstances=
 for containerInstanceArn in "${containerInstancesArns[@]}"; do
   # example of the containerInstanceArn:
-  # arn:aws:ecs:us-east-1:659932254483:container-instance/e3s-dev/d085f4e3d2254973beba21d11d7ad105
+  # arn:aws:ecs:{Region}:{Account}:container-instance/e3s-{Env}/d085f4e3d2254973beba21d11d7ad105
   # example of the containerInstanceId:
   # d085f4e3d2254973beba21d11d7ad105
   containerInstanceId=`echo ${containerInstanceArn} | cut -d '/' -f 3`
