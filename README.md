@@ -33,5 +33,6 @@ Suitable for personal usage and in big clusters:
 * [Prerequisites](docs/prerequisites.md)
 * [Installation](docs/installation.md)
 * [Cleanup](docs/cleanup.md)
+* [Configuration](docs/configuration.md)
 * [Capabilities](docs/capabilities.md)
 * [Errors](docs/errors.md)
