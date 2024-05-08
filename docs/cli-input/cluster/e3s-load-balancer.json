@@ -3,7 +3,7 @@
     "SecurityGroups": [
         "{e3s-sg-id}"
     ],
-    "Scheme": "internet-facing",
+    "Scheme": "internet-facing | internal",
     "Type": "application",
     "IpAddressType": "ipv4"
 }
