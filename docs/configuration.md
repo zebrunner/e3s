@@ -29,14 +29,14 @@
 
 * AWS_REGION={Region}
 * AWS_CLUSTER=e3s-{Env}
-* USE_PUBLIC_IP=true/false. Default value = false
 * AWS_TASK_ROLE=e3s-{Env}-task-role
-* ZEBRUNNER_ENV={Env}
-* AWS_LINUX_CAPACITY_PROVIDER=e3s-{Env}-capacityprovider - should be specified at least on of linux or windows values
-* AWS_WIN_CAPACITY_PROVIDER=e3s-{Env}-win-capacityprovider - should be specified at least on of linux or windows values
-* AWS_TARGET_GROUP=e3s-{Env}-tg - Target group name 
+* AWS_LINUX_CAPACITY_PROVIDER=e3s-{Env}-capacityprovider
+* AWS_WIN_CAPACITY_PROVIDER=e3s-{Env}-win-capacityprovider
+* AWS_TARGET_GROUP=e3s-{Env}-tg
 * S3_BUCKET={S3-bucket}
 * S3_REGION={Region}
+* ZEBRUNNER_ENV={Env}
+* USE_PUBLIC_IP=true/false. Default value = false
 
 
 #### Optional variables
