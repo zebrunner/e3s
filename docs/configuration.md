@@ -2,7 +2,7 @@
 
 ## Env files
 
-> Supported env vars are differ from version to version for scaler and router images
+> Supported env vars can differ from version to version for scaler and router images
 
 ### Scaler.env
 
