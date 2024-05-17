@@ -73,3 +73,17 @@ To update desired capacity/terminate instances in autoscaling group etc. The use
 Policy for elb and cluster deploy/cleanup. The user should also have attached Monitor and Manage policies
 
 * aws iam create-policy --policy-name e3s-deploy-policy --policy-document [file://e3s-deploy-policy.json](cli-input/roles/file://e3s-deploy-policy.json)
+
+## E3S server instance
+
+### Hardware
+
+* Network optimized instance m5n.large+
+* Configured IMDSv2 (HttpPutResponseHopLimit=2)
+* Attached [e3s-{Env}-sg](cli-input/security-groups/e3s-sg.json) security group
+
+### Software
+
+* Installed Docker v19+
+* Installed Docker compose plugin v2.20.3+
+* [Optional] Installed jq and aws cli for ./scripts support
