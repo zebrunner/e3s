@@ -64,6 +64,7 @@
 ### Load balancer
 
 1. Create load balancer. In [file://e3s-load-balancer.json](cli-input/cluster/e3s-load-balancer.json) file should be specified subnets and e3s-sg id
+    > Note: update ALB Scheme to `internal` inside [file://e3s-load-balancer.json](cli-input/cluster/e3s-load-balancer.json) to make environment publicly unavailable
 * aws elbv2 create-load-balancer --name e3s-{Env}-alb --cli-input-json [file://e3s-load-balancer.json](cli-input/cluster/e3s-load-balancer.json)
 * aws elbv2 describe-load-balancer --name e3s-{Env}-alb
 
