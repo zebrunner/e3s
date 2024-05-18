@@ -1,22 +1,22 @@
 {
-    "LoadBalancerArn": "",
+    "LoadBalancerArn": "{e3s-alb-arn}",
     "Protocol": "HTTPS",
     "Port": 443,
     "SslPolicy": "ELBSecurityPolicy-2016-08",
     "Certificates": [
         {
-            "CertificateArn": ""
+            "CertificateArn": "{certificate-arn}"
         }
     ],
     "DefaultActions": [
         {
             "Type": "forward",
-            "TargetGroupArn": "",
+            "TargetGroupArn": "{e3s-tg-arn}",
             "Order": 1,
             "ForwardConfig": {
                 "TargetGroups": [
                     {
-                        "TargetGroupArn": "",
+                        "TargetGroupArn": "{e3s-tg-arn}",
                         "Weight": 1
                     }
                 ],
