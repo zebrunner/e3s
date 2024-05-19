@@ -31,8 +31,5 @@ Suitable for personal usage and in big clusters:
 
 ## Documentation 
 * [Prerequisites](docs/prerequisites.md)
-* [Installation](docs/installation.md)
-* [Cleanup](docs/cleanup.md)
-* [Configuration](docs/configuration.md)
-* [Capabilities](docs/capabilities.md)
-* [Errors](docs/errors.md)
+* [ECS E3S cluster creation](docs/ecs_e3s_cluster_creation.md)
+* [Usage](docs/usage.md)
