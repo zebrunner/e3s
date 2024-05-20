@@ -3,8 +3,9 @@
 To be able to configure and start/down/manage e3s services
 
 1. Clone this repository to e3s server instance
-
-* git clone https://github.com/zebrunner/e3s.git && cd e3s
+   ```
+   git clone https://github.com/zebrunner/e3s.git && cd e3s
+   ```
 
 2. Replace all {Env}, {Account}, {Region}, {S3-bucket} vars in router.env and scaler.env files
 
