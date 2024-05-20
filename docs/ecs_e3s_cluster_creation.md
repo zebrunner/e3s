@@ -12,7 +12,6 @@
 * aws ec2 describe-launch-template-versions --launch-template-name e3s-{Env}-launch-template
 
 3. Create auto scaling group. Additionly in [file://e3s-asg.json](cli-input/cluster/e3s-linux-asg.json) file should be specified Availability Zones, Subnets and compute optimized instance types (Recommended min instance type is c5a.2xlarge)
-
 * aws autoscaling create-auto-scaling-group --auto-scaling-group-name e3s-{Env}-asg --cli-input-json [file://e3s-linux-asg.json](cli-input/cluster/e3s-linux-asg.json)
 * aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names e3s-{Env}-asg
 
@@ -25,12 +24,10 @@
 1. Encode [user data](cli-input/cluster/e3s-windows-userdata.txt) to base64. Make sure that {VpcCidrBlock} is specified for -AwsvpcAdditionalLocalRoutes flag in windows userdata
 
 2. Create launch template. In [file://e3s-windows-launch-template.json](cli-input/cluster/e3s-windows-launch-template.json) file should be additionally specified Zebrunner Selenium Grid Windows Agent Ami Id, Key Name, e3s-sg id and encoded userdata from previouse step
-
 * aws ec2 create-launch-template --launch-template-name e3s-{Env}-win-launch-template --cli-input-json [file://e3s-windows-launch-template.json](cli-input/cluster/e3s-windows-launch-template.json)
 * aws ec2 describe-launch-template-versions --launch-template-name e3s-{Env}-win-launch-template
 
 3. Create auto scaling group. Additionly in [file://e3s-windows-asg.json](cli-input/cluster/e3s-windows-asg.json) file should be specified Availability Zones, Subnets and compute optimized instance types (Recommended min instance type is c5a.2xlarge)
-
 * aws autoscaling create-auto-scaling-group --auto-scaling-group-name e3s-{Env}-win-asg --cli-input-json [file://e3s-windows-asg.json](cli-input/cluster/e3s-windows-asg.json)
 * aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names e3s-{Env}-win-asg
 
@@ -65,15 +62,19 @@
 * aws elbv2 create-load-balancer --name e3s-{Env}-alb --cli-input-json [file://e3s-load-balancer.json](cli-input/cluster/e3s-load-balancer.json)
 * aws elbv2 describe-load-balancers --name e3s-{Env}-alb
 
-2. Create target group. In [file://e3s-target-group.json](cli-input/cluster/e3s-target-group.json) file should be specified {VpcId}
+2. Increase deregistration_delay.timeout_seconds attribute value for load balancer
+* aws elbv2 modify-load-balancer-attributes --attributes Key=idle_timeout.timeout_seconds,Value=660 --load-balancer-arn {e3s-alb-arn}
+* aws elbv2 describe-load-balancer-attributes --load-balancer-arn {e3s-alb-arn}
+
+3. Create target group. In [file://e3s-target-group.json](cli-input/cluster/e3s-target-group.json) file should be specified {VpcId}
 * aws elbv2 create-target-group --name e3s-{Env}-tg --cli-input-json [file://e3s-target-group.json](cli-input/cluster/e3s-target-group.json)
 * aws elbv2 describe-target-groups --names e3s-{Env}-tg
 
-3. Increase deregistration_delay.timeout_seconds attribute value
+4. Increase deregistration_delay.timeout_seconds attribute value for target group
 * aws elbv2 modify-target-group-attributes --attributes Key=deregistration_delay.timeout_seconds,Value=660 --target-group-arn {e3s-tg-arn}
 * aws elbv2 describe-target-group-attributes --target-group-arn {e3s-tg-arn}
 
-4. Create listener. Update LoadBalancerArn and TargetGroupArn in [file://e3s-listener.json](cli-input/cluster/e3s-listener.json) file, specify certificate to use
+5. Create listener. Update LoadBalancerArn and TargetGroupArn in [file://e3s-listener.json](cli-input/cluster/e3s-listener.json) file, specify certificate to use
 * aws elbv2 create-listener --cli-input-json [file://e3s-listener.json](cli-input/cluster/e3s-listener.json)
 * aws elbv2 describe-listeners --load-balancer-arn {e3s-alb-arn}
 

@@ -59,17 +59,17 @@ Every video, session log, video log etc. is stored in particular s3 bucket
 
 ## [Optional] E3S user policies
  
-### [Monitor policy](cli-input/security-groups/e3s-monitor-policy.json)
+### [Monitor policy](cli-input/roles/e3s-monitor-policy.json)
 To view current state of e3s infrastructure
 
 * aws iam create-policy --policy-name e3s-{Env}-monitor-policy --policy-document [file://e3s-monitor-policy.json](cli-input/roles/e3s-monitor-policy.json)
 
-### [Manage policy](cli-input/security-groups/e3s-manage-policy.json)
+### [Manage policy](cli-input/roles/e3s-manage-policy.json)
 To update desired capacity/terminate instances in autoscaling group etc. The user should also have attached Monitor policy
 
 * aws iam create-policy --policy-name e3s-{Env}-manage-policy --policy-document [file://e3s-manage-policy.json](cli-input/roles/e3s-manage-policy.json)
 
-### [Deploy policy](cli-input/security-groups/e3s-deploy-policy.json)
+### [Deploy policy](cli-input/roles/e3s-deploy-policy.json)
 Policy for elb and cluster deploy/cleanup. The user should also have attached Monitor and Manage policies
 
 * aws iam create-policy --policy-name e3s-deploy-policy --policy-document [file://e3s-deploy-policy.json](cli-input/roles/e3s-deploy-policy.json)
