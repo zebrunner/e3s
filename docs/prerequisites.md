@@ -22,7 +22,7 @@ Access to server and ssh connections
 Access to allocate tasks across the full range of Docker ports on agent instances
 
 * aws ec2 create-security-group --group-name e3s-{Env}-agent-sg --description "e3s {Env} agent sg"
-* aws ec2 authorize-security-group-ingress --group-name  e3s-{Env}-agent-sg --cli-input-json [file://e3s-sg-agent.json](cli-input/security-groups/e3s-sg-agent)
+* aws ec2 authorize-security-group-ingress --group-name  e3s-{Env}-agent-sg --cli-input-json [file://e3s-sg-agent.json](cli-input/security-groups/e3s-agent-sg.json)
 
 ## Artifacts storage
 
@@ -59,20 +59,20 @@ Every video, session log, video log etc. is stored in particular s3 bucket
 
 ## [Optional] E3S user policies
  
-### [Monitor policy](cli-input/security-groups/e3s-monitor-policy.json)
+### [Monitor policy](cli-input/roles/e3s-monitor-policy.json)
 To view current state of e3s infrastructure
 
 * aws iam create-policy --policy-name e3s-{Env}-monitor-policy --policy-document [file://e3s-monitor-policy.json](cli-input/roles/e3s-monitor-policy.json)
 
-### [Manage policy](cli-input/security-groups/e3s-manage-policy.json)
+### [Manage policy](cli-input/roles/e3s-manage-policy.json)
 To update desired capacity/terminate instances in autoscaling group etc. The user should also have attached Monitor policy
 
-* aws iam create-policy --policy-name e3s-{Env}-manage-policy --policy-document [file://e3s-manage-policy.json](cli-input/roles/file://e3s-manage-policy.json)
+* aws iam create-policy --policy-name e3s-{Env}-manage-policy --policy-document [file://e3s-manage-policy.json](cli-input/roles/e3s-manage-policy.json)
 
-### [Deploy policy](cli-input/security-groups/e3s-deploy-policy.json)
+### [Deploy policy](cli-input/roles/e3s-deploy-policy.json)
 Policy for elb and cluster deploy/cleanup. The user should also have attached Monitor and Manage policies
 
-* aws iam create-policy --policy-name e3s-deploy-policy --policy-document [file://e3s-deploy-policy.json](cli-input/roles/file://e3s-deploy-policy.json)
+* aws iam create-policy --policy-name e3s-deploy-policy --policy-document [file://e3s-deploy-policy.json](cli-input/roles/e3s-deploy-policy.json)
 
 ## E3S server instance
 
