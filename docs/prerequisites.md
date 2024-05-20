@@ -27,7 +27,7 @@ Access to allocate tasks across the full range of Docker ports on agent instance
 ## Artifacts storage
 
 ### [S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-Every video, session log, video log etc. is stored in particular s3 bucket
+Every video, session log, video log etc is stored in particular s3 bucket
 
 * aws s3 create-bucket --bucket {S3-bucket}
 
