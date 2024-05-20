@@ -92,6 +92,7 @@
                 "elasticloadbalancing:RegisterTargets",
                 "elasticloadbalancing:DeregisterTargets",
                 "elasticloadbalancing:ModifyTargetGroupAttributes",
+                "elasticloadbalancing:ModifyLoadBalancerAttributes",
                 "elasticloadbalancing:ModifyListener"
             ],
             "Resource": [
