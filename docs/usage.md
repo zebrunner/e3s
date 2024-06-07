@@ -6,18 +6,18 @@ To be able to configure and start/down/manage e3s services
 
 * git clone https://github.com/zebrunner/e3s.git && cd e3s
 
-2. Replace all {Env}, {Account}, {Region}, {S3-bucket} vars in router.env and scaler.env files
+2. Replace all {Env}, {Account}, {Region}, {S3-bucket} vars in config.env and router.env files
 
-3. Configure any other variable in router.env, scaler.env and data.env if needed
+3. Configure any other variable in config.env, router.env, scaler.env, data.env and e3s-definitions.env if needed
 
 
 ## E3S server configuration
 
 ### Env files
 
-> Supported env vars can differ from version to version for scaler and router images
+> Supported env vars can differ from version to version
 
-#### Scaler.env
+#### Config.env
 
 ##### Required variables
 
@@ -25,49 +25,55 @@ To be able to configure and start/down/manage e3s services
 * AWS_CLUSTER=e3s-{Env}
 * AWS_TASK_ROLE=e3s-{Env}-task-role
 * ZEBRUNNER_ENV={Env}
+
+##### Optional variables
+
+* IDLE_TIMEOUT - Session idle timeout in time.Duration format. Default value = 1 min
+* MAX_TIMEOUT - Maximum valid task/session timeout in time.Duration format. Default value = 24 hours
+* LOG_LEVEL - Desired log level. Valid levels: `panic`, `fatal`, `error`, `warning`, `info`, `debug`, `trace`. Default value = debug
+
+#### Scaler.env
 
 ##### Optional variables
 
 * RESERVE_INSTANCES_PERCENT - Additional weight capacity reservation percent. Default value = 0.25
 * RESERVE_MAX_CAPACITY - Max number of additional weight capacity reservation. Default value = 5
 * INSTANCE_COOLDOWN_TIMEOUT - Time after instance start when shutdown is prohibited on scale down in time.Duration format. Default value = 4 min
-* EXCLUDE_BROWSERS - Excludes selected browser images from registering them as a task definition. Default value = empty
-* LOG_LEVEL - Desired log level. Valid levels: `panic`, `fatal`, `error`, `warning`, `info`, `debug`, `trace`. Default value = debug
-* IDLE_TIMEOUT - Session idle timeout in time.Duration format. Default value = 1 min
-* MAX_TIMEOUT - Maximum valid task/session timeout in time.Duration format. Default value = 24 hours
 
 #### Router.env
 
 ##### Required variables
 
-* AWS_REGION={Region}
-* AWS_CLUSTER=e3s-{Env}
-* AWS_TASK_ROLE=e3s-{Env}-task-role
 * AWS_LINUX_CAPACITY_PROVIDER=e3s-{Env}-capacityprovider
 * AWS_WIN_CAPACITY_PROVIDER=e3s-{Env}-win-capacityprovider
 * AWS_TARGET_GROUP=e3s-{Env}-tg
 * S3_BUCKET={S3-bucket}
 * S3_REGION={Region}
-* ZEBRUNNER_ENV={Env}
-* USE_PUBLIC_IP=true/false. Default value = false
-
 
 ##### Optional variables
 
-* EXCLUDE_BROWSERS - Excludes selected browser images from registering them as a task definition. Default value = empty
-* LOG_LEVEL - Desired log level. Valid levels: `panic`, `fatal`, `error`, `warning`, `info`, `debug`, `trace`. Default value = debug
-* IDLE_TIMEOUT - Session idle timeout in time.Duration format. Default value = 1 min
-* MAX_TIMEOUT - Maximum valid task/session timeout in time.Duration format. Default value = 24 hours
+* USE_PUBLIC_IP=true/false. Default value = false
 * SERVICE_STARTUP_TIMEOUT - Task and session startup timeout in time.Duration format. Default value = 10 min
 * SESSION_DELETE_TIMEOUT - Session delete timeout in time.Duration format. Default value = 30 sec
 
 #### Data.env
 
-##### Required variables
+##### Optional variables
 
 * POSTGRES_PASSWORD - Password of user, passed in DATABASE var
 * DATABASE - Address to postgres
 * AWS_ELASTIC_CACHE - Address to redis
+* DEFINITIONS_CONNECTION - Address to e3s-definitions service
+
+#### E3S-definitions.env
+
+##### Required variables
+
+* IMAGE_REPOSITORIES - Repositories with supported browsers
+
+##### Optional variables
+
+* EXCLUDE_BROWSERS - Excludes selected browser images from registering them as a task definition. Default value = empty
 
 ### E3S server process management
 
