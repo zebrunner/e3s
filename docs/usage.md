@@ -96,7 +96,7 @@ Usage: ./zebrunner.sh [option]
 
 ## Errors
 
-If something went wrong during the creation/execution/finish phase, the client will receive an error message from E3S or Selenium. This paragraph will describe all possible errors from the E3S side.
+If something went wrong during the creation/execution/finish phase, the client will receive an error message from E3S or Selenium. This paragraph will describe the most popular errors from the E3S side.
 
 > To enable exteneded error response by E3S, pass zebrunner:enableDebug=true capability.
 
