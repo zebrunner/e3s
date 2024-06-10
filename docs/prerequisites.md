@@ -133,9 +133,19 @@ aws iam create-policy --policy-name e3s-deploy-policy --policy-document [file://
 ### Hardware
 
 * Network optimized instance m5n.large+
-* Configured IMDSv2 (HttpPutResponseHopLimit=2)
+* Configured IMDSv2 (HttpPutResponseHopLimit=2). Replace {e3s-server-instance-id} with actual instance-id
+
+    ```
+    aws ec2 modify-instance-metadata-options --instance-id {e3s-server-instance-id} --http-tokens required --http-put-response-hop-limit 2 --http-endpoint enabled
+    ```
+
+* Attached [e3s-{Env}-role](cli-input/roles/e3s-policy.json) instance-role. Replace {e3s-server-instance-id} with actual instance-id
+
+    ```
+    aws ec2 associate-iam-instance-profile --iam-instance-profile Name=e3s-{Env}-role --instance-id {e3s-server-instance-id}
+    ```
+
 * Attached [e3s-{Env}-sg](cli-input/security-groups/e3s-sg.json) security group
-* Attached [e3s-{Env}-role](cli-input/roles/e3s-policy.json) instance-role
 
 ### Software
 
