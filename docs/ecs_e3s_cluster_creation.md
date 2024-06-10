@@ -23,7 +23,7 @@ aws ec2 describe-launch-template-versions --launch-template-name e3s-{Env}-launc
 
 ### Create auto scaling group
 
-Additionly in [file://e3s-asg.json](cli-input/cluster/e3s-linux-asg.json) file should be specified Availability Zones, Subnets and compute optimized instance types (Recommended min instance type is c5a.2xlarge)
+Additionly in [file://e3s-asg.json](cli-input/cluster/e3s-linux-asg.json) file should be specified Availability Zones, Subnets and compute optimized instance types (Recommended instance type is c5a.4xlarge)
 
 ```
 aws autoscaling create-auto-scaling-group --auto-scaling-group-name e3s-{Env}-asg --cli-input-json [file://e3s-linux-asg.json](cli-input/cluster/e3s-linux-asg.json)
@@ -65,7 +65,7 @@ aws ec2 describe-launch-template-versions --launch-template-name e3s-{Env}-win-l
 
 ### Create auto scaling group
 
-Additionly in [file://e3s-windows-asg.json](cli-input/cluster/e3s-windows-asg.json) file should be specified Availability Zones, Subnets and compute optimized instance types (Recommended min instance type is c5a.2xlarge)
+Additionly in [file://e3s-windows-asg.json](cli-input/cluster/e3s-windows-asg.json) file should be specified Availability Zones, Subnets and compute optimized instance types (Recommended min instance type is c5a.4xlarge)
 
 ```
 aws autoscaling create-auto-scaling-group --auto-scaling-group-name e3s-{Env}-win-asg --cli-input-json [file://e3s-windows-asg.json](cli-input/cluster/e3s-windows-asg.json)
