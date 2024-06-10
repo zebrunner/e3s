@@ -135,6 +135,7 @@ aws iam create-policy --policy-name e3s-deploy-policy --policy-document [file://
 * Network optimized instance m5n.large+
 * Configured IMDSv2 (HttpPutResponseHopLimit=2)
 * Attached [e3s-{Env}-sg](cli-input/security-groups/e3s-sg.json) security group
+* Attached [e3s-{Env}-role](cli-input/roles/e3s-policy.json) instance-role
 
 ### Software
 
