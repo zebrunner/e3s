@@ -106,6 +106,8 @@ aws iam attach-role-policy --role-name e3s-{Env}-task-role --policy-arn arn:aws:
 ```
 
 ## [Optional] E3S user policies
+
+> Replace all {Env}, {Account}, {Region} vars in the next paragraph and corresponding json files
  
 ### [Monitor policy](cli-input/roles/e3s-monitor-policy.json)
 To view current state of e3s infrastructure

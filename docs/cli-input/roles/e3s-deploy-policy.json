@@ -24,7 +24,7 @@
             ],
             "Condition": {
                 "StringLike": {
-                    "ec2:Region": "us-east-?"
+                    "ec2:Region": "{Region}"
                 }
             }
         },
