@@ -54,6 +54,7 @@ aws s3 create-bucket --bucket {S3-bucket}
 ### e3s-{Env} role, policy and instance-profile 
 
 > [file://e3s-ec2-assume-document.json](cli-input/roles/e3s-ec2-assume-document.json)
+
 > [file://e3s-policy.json](cli-input/roles/e3s-policy.json)
 
 ```
@@ -79,6 +80,7 @@ aws iam add-role-to-instance-profile --instance-profile-name e3s-{Env}-role --ro
 ### e3s-{Env}-agent role, policy and instance-profile 
 
 > [file://e3s-ec2-assume-document.json](cli-input/roles/e3s-ec2-assume-document.json)
+
 > [file://e3s-agent-policy.json](cli-input/roles/e3s-agent-policy.json)
 
 ```
@@ -104,6 +106,7 @@ aws iam add-role-to-instance-profile --instance-profile-name e3s-{Env}-agent-rol
 ### e3s-{Env}-task role and policy
 
 > [file://e3s-ecs-assume-document.json](cli-input/roles/e3s-ecs-assume-document.json)
+
 > [file://e3s-task-policy.json](cli-input/roles/e3s-task-policy.json)
 
 ```
