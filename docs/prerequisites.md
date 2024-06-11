@@ -12,26 +12,30 @@ Windows based ECS optimized instance with embedded Zebrunner tuning for scalable
 
 Security groups contain only inbound rules
 
-### [E3S server Load Balancer security group](cli-input/security-groups/e3s-sg.json)
+### E3S server Load Balancer security group
 Access to server and ssh connections
+
+> [file://e3s-sg.json](cli-input/security-groups/e3s-sg.json)
 
 ```
 aws ec2 create-security-group --group-name e3s-{Env}-sg --description "e3s {Env} sg"
 ```
 
 ```
-aws ec2 authorize-security-group-ingress --group-name  e3s-{Env}-sg --cli-input-json [file://e3s-sg.json](cli-input/security-groups/e3s-sg.json)
+aws ec2 authorize-security-group-ingress --group-name  e3s-{Env}-sg --cli-input-json file://e3s-sg.json
 ```
 
-### [Agent security group](cli-input/security-groups/e3s-agent-sg.json)
-Access to allocate tasks across the full range of Docker ports on agent instances
+### Agent security group
+Access to allocate tasks across the full range of Docker ports on agent instances.
+
+> [file://e3s-agent-sg.json](cli-input/security-groups/e3s-agent-sg.json)
 
 ```
 aws ec2 create-security-group --group-name e3s-{Env}-agent-sg --description "e3s {Env} agent sg"
 ```
 
 ```
-aws ec2 authorize-security-group-ingress --group-name  e3s-{Env}-agent-sg --cli-input-json [file://e3s-sg-agent.json](cli-input/security-groups/e3s-agent-sg.json)
+aws ec2 authorize-security-group-ingress --group-name  e3s-{Env}-agent-sg --cli-input-json file://e3s-agent-sg.json
 ```
 
 ## Artifacts storage
@@ -49,12 +53,16 @@ aws s3 create-bucket --bucket {S3-bucket}
 
 ### e3s-{Env} role, policy and instance-profile 
 
+> [file://e3s-ec2-assume-document.json](cli-input/roles/e3s-ec2-assume-document.json)
+
+> [file://e3s-policy.json](cli-input/roles/e3s-policy.json)
+
 ```
-aws iam create-role --role-name e3s-{Env}-role --assume-role-policy-document [file://e3s-ec2-assume-document.json](cli-input/roles/e3s-ec2-assume-document.json)
+aws iam create-role --role-name e3s-{Env}-role --assume-role-policy-document file://e3s-ec2-assume-document.json
 ```
 
 ```
-aws iam create-policy --policy-name e3s-{Env}-policy --policy-document [file://e3s-policy.json](cli-input/roles/e3s-policy.json)
+aws iam create-policy --policy-name e3s-{Env}-policy --policy-document file://e3s-policy.json
 ```
 
 ```
@@ -71,12 +79,16 @@ aws iam add-role-to-instance-profile --instance-profile-name e3s-{Env}-role --ro
 
 ### e3s-{Env}-agent role, policy and instance-profile 
 
+> [file://e3s-ec2-assume-document.json](cli-input/roles/e3s-ec2-assume-document.json)
+
+> [file://e3s-agent-policy.json](cli-input/roles/e3s-agent-policy.json)
+
 ```
-aws iam create-role --role-name e3s-{Env}-agent-role --assume-role-policy-document [file://e3s-ec2-assume-document.json](cli-input/roles/e3s-ec2-assume-document.json)
+aws iam create-role --role-name e3s-{Env}-agent-role --assume-role-policy-document file://e3s-ec2-assume-document.json
 ```
 
 ```
-aws iam create-policy --policy-name e3s-{Env}-agent-policy --policy-document [file://e3s-agent-policy.json](cli-input/roles/e3s-agent-policy.json)
+aws iam create-policy --policy-name e3s-{Env}-agent-policy --policy-document file://e3s-agent-policy.json
 ```
 
 ```
@@ -93,12 +105,16 @@ aws iam add-role-to-instance-profile --instance-profile-name e3s-{Env}-agent-rol
 
 ### e3s-{Env}-task role and policy
 
+> [file://e3s-ecs-assume-document.json](cli-input/roles/e3s-ecs-assume-document.json)
+
+> [file://e3s-task-policy.json](cli-input/roles/e3s-task-policy.json)
+
 ```
-aws iam create-role --role-name e3s-{Env}-task-role --assume-role-policy-document [file://e3s-ecs-assume-document.json](cli-input/roles/e3s-ecs-assume-document.json)
+aws iam create-role --role-name e3s-{Env}-task-role --assume-role-policy-document file://e3s-ecs-assume-document.json
 ```
 
 ```
-aws iam create-policy --policy-name e3s-{Env}-task-policy --policy-document [file://e3s-task-policy.json](cli-input/roles/e3s-task-policy.json)
+aws iam create-policy --policy-name e3s-{Env}-task-policy --policy-document file://e3s-task-policy.json
 ```
 
 ```
@@ -109,25 +125,31 @@ aws iam attach-role-policy --role-name e3s-{Env}-task-role --policy-arn arn:aws:
 
 > Replace all {Env}, {Account}, {Region} vars in the next paragraph and corresponding json files
  
-### [Monitor policy](cli-input/roles/e3s-monitor-policy.json)
+### Monitor policy
 To view current state of e3s infrastructure
 
+> [file://e3s-monitor-policy.json](cli-input/roles/e3s-monitor-policy.json)
+
 ```
-aws iam create-policy --policy-name e3s-{Env}-monitor-policy --policy-document [file://e3s-monitor-policy.json](cli-input/roles/e3s-monitor-policy.json)
+aws iam create-policy --policy-name e3s-{Env}-monitor-policy --policy-document file://e3s-monitor-policy.json
 ```
 
-### [Manage policy](cli-input/roles/e3s-manage-policy.json)
+### Manage policy
 To update desired capacity/terminate instances in autoscaling group etc. The user should also have attached Monitor policy
 
+>  [file://e3s-manage-policy.json](cli-input/roles/e3s-manage-policy.json)
+
 ```
-aws iam create-policy --policy-name e3s-{Env}-manage-policy --policy-document [file://e3s-manage-policy.json](cli-input/roles/e3s-manage-policy.json)
+aws iam create-policy --policy-name e3s-{Env}-manage-policy --policy-document file://e3s-manage-policy.json
 ```
 
-### [Deploy policy](cli-input/roles/e3s-deploy-policy.json)
+### Deploy policy
 Policy for elb and cluster deploy/cleanup. The user should also have attached Monitor and Manage policies
 
+> [file://e3s-deploy-policy.json](cli-input/roles/e3s-deploy-policy.json)
+
 ```
-aws iam create-policy --policy-name e3s-deploy-policy --policy-document [file://e3s-deploy-policy.json](cli-input/roles/e3s-deploy-policy.json)
+aws iam create-policy --policy-name e3s-deploy-policy --policy-document file://e3s-deploy-policy.json
 ```
 
 ## E3S server instance
