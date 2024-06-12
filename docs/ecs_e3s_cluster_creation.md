@@ -111,9 +111,27 @@ aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{Env}-win-asg -
 
 ### [Optional] Enabling forecasts for autoscaling
 
-#### Add scaling policy that creates forecasts but doesn't scale 
+#### Linux
+
+> [file://e3s-linux-forecasts.json](cli-input/cluster/e3s-linux-forecasts.json)
+
+```
+aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{Env}-asg --policy-name predictive --policy-type PredictiveScaling --predictive-scaling-configuration file://e3s-linux-forecasts.json
+```
+
+#### Windows
+
+> [file://e3s-windows-forecasts.json](cli-input/cluster/e3s-windows-forecasts.json)
+
+```
+aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{Env}-win-asg --policy-name predictive --policy-type PredictiveScaling --predictive-scaling-configuration file://e3s-windows-forecasts.json
+```
+
+#### Add scaling policy that creates forecasts but doesn't scale
 
 > [e3s-forecasts-configuration.json](cli-input/cluster/e3s-forecasts-configuration.json) - contains a complete policy configuration that uses CPU utilization metrics for predictive scaling with a target utilization of 40.
+
+
 
 ```
 aws autoscaling put-scaling-policy --policy-name {prefix}-predictive-scaling-policy \

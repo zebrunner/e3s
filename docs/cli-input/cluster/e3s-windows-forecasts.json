@@ -1,0 +1,13 @@
+{
+    "MetricSpecifications": [
+        {
+            "TargetValue": ???,
+            "PredefinedMetricPairSpecification": {
+                "PredefinedMetricType": "ASGCPUUtilization"
+            }
+        }
+    ],
+    "Mode": "ForecastAndScale",
+    "SchedulingBufferTime": ???,
+    "MaxCapacityBreachBehavior": "HonorMaxCapacity"
+}
