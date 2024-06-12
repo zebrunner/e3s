@@ -127,28 +127,6 @@ aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{Env}-asg --pol
 aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{Env}-win-asg --policy-name predictive --policy-type PredictiveScaling --predictive-scaling-configuration file://e3s-windows-forecasts.json
 ```
 
-#### Add scaling policy that creates forecasts but doesn't scale
-
-> [e3s-forecasts-configuration.json](cli-input/cluster/e3s-forecasts-configuration.json) - contains a complete policy configuration that uses CPU utilization metrics for predictive scaling with a target utilization of 40.
-
-
-
-```
-aws autoscaling put-scaling-policy --policy-name {prefix}-predictive-scaling-policy \
-  --auto-scaling-group-name e3s-{Env}-asg --policy-type PredictiveScaling \
-  --predictive-scaling-configuration file://e3s-forecasts-configuration.json
-```
-
-#### Add scaling policy that forecasts and scales
-
-> [e3s-forecasts-scales-configuration.json](cli-input/cluster/e3s-forecasts-scales-configuration.json) - contains a policy configuration that uses Application Load Balancer request count metrics. The target utilization is 1000, and predictive scaling is set to ForecastAndScale mode. Should be added `ResourceLabel`.
-
-```
-aws autoscaling put-scaling-policy --policy-name {prefix}-predictive-scaling-policy \
-  --auto-scaling-group-name e3s-{Env}-asg --policy-type PredictiveScaling \
-  --predictive-scaling-configuration file://e3s-forecasts-scales-configuration.json
-```
-
 ## Load balancer
 
 ### Create load balancer
