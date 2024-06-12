@@ -8,7 +8,7 @@ To be able to configure and start/down/manage e3s services
 
 2. Replace all {Env}, {Account}, {Region}, {S3-bucket} vars in config.env and router.env files
 
-3. Configure any other variable in config.env, router.env, scaler.env, data.env and e3s-definitions.env if needed
+3. Configure any other variable in config.env, router.env, scaler.env, data.env and task-definitions.env if needed
 
 
 ## E3S server configuration
@@ -63,9 +63,9 @@ To be able to configure and start/down/manage e3s services
 * POSTGRES_PASSWORD - Password of user, passed in DATABASE var
 * DATABASE - Address to postgres
 * AWS_ELASTIC_CACHE - Address to redis
-* DEFINITIONS_CONNECTION - Address to e3s-definitions service
+* DEFINITIONS_CONNECTION - Address to task-definitions service
 
-#### E3S-definitions.env
+#### Task-definitions.env
 
 ##### Required variables
 
