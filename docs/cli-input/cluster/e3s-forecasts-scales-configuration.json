@@ -1,0 +1,12 @@
+{
+    "MetricSpecifications": [
+        {
+            "TargetValue": 1000,
+            "PredefinedMetricPairSpecification": {
+                "PredefinedMetricType": "ALBRequestCount",
+                "ResourceLabel": "{e3s-alb-resource-label}"
+            }
+        }
+    ],
+    "Mode": "ForecastAndScale"
+}

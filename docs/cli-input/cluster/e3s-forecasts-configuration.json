@@ -1,0 +1,10 @@
+{
+    "MetricSpecifications": [
+        {
+            "TargetValue": 40,
+            "PredefinedMetricPairSpecification": {
+                "PredefinedMetricType": "ASGCPUUtilization"
+            }
+        }
+    ]
+}
