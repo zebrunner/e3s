@@ -21,9 +21,9 @@
             "OnDemandPercentageAboveBaseCapacity": 100
         }
     },
-    "MinSize": 0,
-    "MaxSize": 30,
-    "DesiredCapacity": 0,
+    "MinSize": 2,
+    "MaxSize": 50,
+    "DesiredCapacity": 2,
     "DefaultCooldown": 10,
     "AvailabilityZones": [ "{Zones}" ], 
     "HealthCheckType": "EC2", 
