@@ -49,7 +49,15 @@ aws ecs describe-capacity-providers --capacity-providers e3s-{Env}-capacityprovi
 
 ### Encode user data
 
-[Used data](cli-input/cluster/e3s-windows-userdata.txt) should be encoded to base64. Make sure that {VpcCidrBlock} is specified for -AwsvpcAdditionalLocalRoutes flag in windows userdata
+[Used data](cli-input/cluster/e3s-windows-userdata.txt) should be encoded to base64. Make sure that {VpcCidrBlock} is specified for -AwsvpcAdditionalLocalRoutes flag in windows userdata.
+
+`{VpcCidrBlock}` is the  IP addresses for your virtual private cloud (VPC). If you need to get information about VPC, call this command:
+
+```
+aws ec2 describe-vpcs
+```
+
+Find required VPC in the output and reuse it's `CidrBlock` value instead of `{VpcCidrBlock}`.
 
 ### Create launch template
 
