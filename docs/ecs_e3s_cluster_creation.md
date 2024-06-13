@@ -117,26 +117,22 @@ aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{Env}-asg --pol
 aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{Env}-win-asg --policy-name ECSManagedAutoScalingPolicy-{Uuid} --policy-type TargetTrackingScaling --target-tracking-configuration "{ \"CustomizedMetricSpecification\": { \"MetricName\": \"CapacityProviderReservation\", \"Namespace\": \"AWS/ECS/ManagedScaling\", \"Dimensions\": [{ \"Name\": \"CapacityProviderName\", \"Value\": \"e3s-{Env}-win-capacityprovider\" }, { \"Name\": \"ClusterName\", \"Value\": \"e3s-{Env}\"}], \"Statistic\": \"Average\"}, \"TargetValue\": 100.0, \"DisableScaleIn\": false }" --no-enabled
 ```
 
-### [Optional] Add crons for min/max capacity upgrade
+### [Optional] Enabling forecasts for autoscaling
 
-#### daily-mode, cron 0 6 * * 1-5
+#### Linux
 
-```
-aws autoscaling put-scheduled-update-group-action --auto-scaling-group-name e3s-{Env}-asg --scheduled-action-name daily-mode --recurrence "0 6 * * 1-5" --min-size 1 --max-size 30 --time-zone Etc/UTC
-```
+> [file://e3s-linux-forecasts.json](cli-input/cluster/e3s-linux-forecasts.json)
 
 ```
-aws autoscaling put-scheduled-update-group-action --auto-scaling-group-name e3s-{Env}-win-asg --scheduled-action-name daily-mode --recurrence "0 6 * * 1-5" --min-size 1 --max-size 30 --time-zone Etc/UTC
+aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{Env}-asg --policy-name predictive --policy-type PredictiveScaling --predictive-scaling-configuration file://e3s-linux-forecasts.json
 ```
 
-#### nightly-mode, cron, 0 18 * * *
+#### Windows
+
+> [file://e3s-windows-forecasts.json](cli-input/cluster/e3s-windows-forecasts.json)
 
 ```
-aws autoscaling put-scheduled-update-group-action --auto-scaling-group-name e3s-{Env}-asg --scheduled-action-name nightly-mode --recurrence "0 18 * * *" --min-size 0 --max-size 30 --time-zone Etc/UTC
-```
-
-```
-aws autoscaling put-scheduled-update-group-action --auto-scaling-group-name e3s-{Env}-win-asg --scheduled-action-name nightly-mode --recurrence "0 18 * * *" --min-size 0 --max-size 30 --time-zone Etc/UTC
+aws autoscaling put-scaling-policy --auto-scaling-group-name e3s-{Env}-win-asg --policy-name predictive --policy-type PredictiveScaling --predictive-scaling-configuration file://e3s-windows-forecasts.json
 ```
 
 ## Load balancer
