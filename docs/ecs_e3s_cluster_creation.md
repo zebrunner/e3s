@@ -14,7 +14,7 @@
 In [file://e3s-linux-launch-template.json](cli-input/cluster/e3s-linux-launch-template.json) file should be additionally specified Zebrunner Selenium Grid Agent Ami Id, Key Name, e3s-sg id and encoded userdata from previouse step
 
 ```
- aws ec2 create-launch-template --launch-template-name e3s-{Env}-launch-template --cli-input-json file://e3s-linux-launch-template.json
+aws ec2 create-launch-template --launch-template-name e3s-{Env}-launch-template --cli-input-json file://e3s-linux-launch-template.json
 ```
 
 ```
