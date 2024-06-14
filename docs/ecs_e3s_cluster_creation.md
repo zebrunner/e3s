@@ -63,7 +63,7 @@ Find required VPC in the output and reuse it's `CidrBlock` value instead of `{Vp
 
  In [file://e3s-windows-launch-template.json](cli-input/cluster/e3s-windows-launch-template.json) file should be additionally specified Zebrunner Selenium Grid Windows Agent Ami Id, Key Name, e3s-sg id and encoded userdata from previouse step
 
- ```
+```
 aws ec2 create-launch-template --launch-template-name e3s-{Env}-win-launch-template --cli-input-json file://e3s-windows-launch-template.json
 ```
 

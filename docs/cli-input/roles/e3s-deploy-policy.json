@@ -53,8 +53,7 @@
                 }
             },
             "Resource": [
-                "arn:aws:iam::{Account}:role/e3s-{Env}-agent-role",
-                "arn:aws:iam::{Account}:role/e3s-{Env}-role"
+                "arn:aws:iam::{Account}:role/e3s-*"
             ]
         },
         {

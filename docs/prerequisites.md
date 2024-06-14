@@ -49,7 +49,7 @@ aws s3 create-bucket --bucket {S3-bucket}
 
 ## E3S roles
 
-> Replace all {Env}, {Account}, {Region} vars in the next paragraph and corresponding json files
+> Replace all {Env}, {Account}, {Region}, {S3-bucket} vars in the next paragraph and corresponding json files
 
 ### e3s-{Env} role, policy and instance-profile 
 
@@ -123,7 +123,7 @@ aws iam attach-role-policy --role-name e3s-{Env}-task-role --policy-arn arn:aws:
 
 ## [Optional] E3S user policies
 
-> Replace all {Env}, {Account}, {Region} vars in the next paragraph and corresponding json files
+> Replace all {Account}, {Region} vars in the next paragraph and corresponding json files
  
 ### Monitor policy
 To view current state of e3s infrastructure
@@ -131,7 +131,7 @@ To view current state of e3s infrastructure
 > [file://e3s-monitor-policy.json](cli-input/roles/e3s-monitor-policy.json)
 
 ```
-aws iam create-policy --policy-name e3s-{Env}-monitor-policy --policy-document file://e3s-monitor-policy.json
+aws iam create-policy --policy-name e3s-monitor-policy --policy-document file://e3s-monitor-policy.json
 ```
 
 ### Manage policy
@@ -140,7 +140,7 @@ To update desired capacity/terminate instances in autoscaling group etc. The use
 >  [file://e3s-manage-policy.json](cli-input/roles/e3s-manage-policy.json)
 
 ```
-aws iam create-policy --policy-name e3s-{Env}-manage-policy --policy-document file://e3s-manage-policy.json
+aws iam create-policy --policy-name e3s-manage-policy --policy-document file://e3s-manage-policy.json
 ```
 
 ### Deploy policy
