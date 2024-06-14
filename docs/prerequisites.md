@@ -41,7 +41,7 @@ aws ec2 authorize-security-group-ingress --group-name  e3s-{Env}-agent-sg --cli-
 ## Artifacts storage
 
 ### [S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-Every video, session log, video log etc. is stored in particular s3 bucket
+Every video, session log, video log etc is stored in particular s3 bucket
 
 ```
 aws s3 create-bucket --bucket {S3-bucket}
