@@ -184,7 +184,7 @@ If the same capability but with different values were passed by prefix and map o
 * `cpu` (alias: `Cpu`) - Value type: integer/string. CPU limitation for executor container measured in [aws units](https://repost.aws/knowledge-center/ecs-cpu-allocation).
 * `memory` (alias: `Memory`) - Value type: integer/string. Memory (RAM) limitation for executor container measured in MiB.
 
-> Max limitation for cpu/memory is configurable uniquely for every E3S server. Max values by default: cpu: 16384, memory: 28675.
+> Max limitation for cpu/memory depends on the selected instance type with lowest weight. In case of c5a.4xlarge it will be: cpu: ~16000 memory: ~30000.
 
 | Environment            | Min (cpu, memory) | Default (cpu, memory) |
 | ---------------------- | ----------------- | --------------------- |
