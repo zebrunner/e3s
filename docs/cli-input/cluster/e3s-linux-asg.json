@@ -7,11 +7,11 @@
             },
             "Overrides": [
                 {
-                    "InstanceType": "c5a.2xlarge",
+                    "InstanceType": "c5a.4xlarge",
                     "WeightedCapacity": "1"
                 },
                 {
-                    "InstanceType": "c5a.4xlarge",
+                    "InstanceType": "c5a.8xlarge",
                     "WeightedCapacity": "2"
                 }
             ]
@@ -21,9 +21,9 @@
             "OnDemandPercentageAboveBaseCapacity": 100
         }
     },
-    "MinSize": 1,
-    "MaxSize": 30,
-    "DesiredCapacity": 1,
+    "MinSize": 2,
+    "MaxSize": 50,
+    "DesiredCapacity": 2,
     "DefaultCooldown": 10,
     "AvailabilityZones": [ "{Zones}" ], 
     "HealthCheckType": "EC2", 

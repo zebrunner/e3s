@@ -17,14 +17,17 @@
                 "ec2:CreateLaunchTemplateVersion",
                 "ec2:DeleteLaunchTemplate",
                 "ec2:DeleteLaunchTemplateVersion",
-                "ec2:RunInstances"
+                "ec2:RunInstances",
+                "ec2:AssociateIamInstanceProfile",
+                "ec2:ModifyInstanceMetadataOptions",
+                "ec2:DescribeVpcs"
             ],
             "Resource": [
                 "*"
             ],
             "Condition": {
                 "StringLike": {
-                    "ec2:Region": "us-east-?"
+                    "ec2:Region": "{Region}"
                 }
             }
         },
@@ -39,7 +42,7 @@
             ]
         },
         {
-            "Sid": "iamForLaunchTemplates",
+            "Sid": "iamForEc2Instances",
             "Effect": "Allow",
             "Action": [
                 "iam:PassRole"
@@ -50,7 +53,7 @@
                 }
             },
             "Resource": [
-                "arn:aws:iam::{Account}:role/e3s-{Env}-agent-role"
+                "arn:aws:iam::{Account}:role/e3s-*"
             ]
         },
         {
