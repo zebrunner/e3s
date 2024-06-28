@@ -10,7 +10,7 @@ services:
     restart: always
   scaler:
     container_name: scaler
-    image: public.ecr.aws/zebrunner/scaler:3.1
+    image: public.ecr.aws/zebrunner/scaler:3.1-beta1
     env_file:
       - ./properties/config.env
       - ./properties/scaler.env
@@ -47,7 +47,7 @@ services:
       max-size: "512m"
     restart: always
   migration:
-    image: public.ecr.aws/zebrunner/migration:latestgit
+    image: public.ecr.aws/zebrunner/migration:latest
     container_name: migration
     env_file:
       - ./properties/data.env
