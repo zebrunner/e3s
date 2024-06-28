@@ -2,27 +2,23 @@ name: backend
 services:
   task-definitions:
     container_name: task-definitions
-    image: public.ecr.aws/zebrunner/task-definitions:3.0
+    image: public.ecr.aws/zebrunner/task-definitions:3.1-beta1
     env_file:
       - ./properties/config.env
       - ./properties/task-definitions.env
       - ./properties/data.env
-    networks:
-      - service-network
     restart: always
   scaler:
     container_name: scaler
-    image: public.ecr.aws/zebrunner/scaler:3.0
+    image: public.ecr.aws/zebrunner/scaler:3.1
     env_file:
       - ./properties/config.env
       - ./properties/scaler.env
       - ./properties/data.env
-    networks:
-      - service-network
     restart: always
   router_1:
     container_name: router_1
-    image: public.ecr.aws/zebrunner/router:3.0
+    image: public.ecr.aws/zebrunner/router:3.1-beta1
     environment:
       - EXTERNAL_PORT=$ROUTER_PORT_1
     env_file:
@@ -34,12 +30,10 @@ services:
     logging:
      options:
       max-size: "512m"
-    networks:
-      - service-network
     restart: always
   router_2:
     container_name: router_2
-    image: public.ecr.aws/zebrunner/router:3.0
+    image: public.ecr.aws/zebrunner/router:3.1-beta1
     environment:
       - EXTERNAL_PORT=$ROUTER_PORT_2
     env_file:
@@ -51,10 +45,9 @@ services:
     logging:
      options:
       max-size: "512m"
-    networks:
-      - service-network
     restart: always
-networks:
-  service-network:
-    external: true
-    name: e3s-network
+  migration:
+    image: public.ecr.aws/zebrunner/migration:latestgit
+    container_name: migration
+    env_file:
+      - ./properties/data.env
