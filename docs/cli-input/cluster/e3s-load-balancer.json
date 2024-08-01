@@ -1,9 +1,0 @@
-{
-    "Subnets": ["{Subnets}"],
-    "SecurityGroups": [
-        "{e3s-sg-id}"
-    ],
-    "Scheme": "internet-facing",
-    "Type": "application",
-    "IpAddressType": "ipv4"
-}

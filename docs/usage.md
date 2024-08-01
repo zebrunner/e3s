@@ -1,6 +1,8 @@
 # Usage
 
-To be able to configure and start/down/manage e3s services
+> To create aws infrastructure refer to [e3s-terraform-deploy](https://github.com/zebrunner/e3s-terraform-deploy) repository.
+
+To be able to configure and start/down/manage e3s services:
 
 1. Clone this repository to e3s server instance
    ```
