@@ -7,7 +7,8 @@ cluster-enabled yes
 cluster-config-file nodes.conf
 cluster-node-timeout 5000
 appendonly yes
-loglevel debug
+auto-aof-rewrite-percentage 10
+auto-aof-rewrite-min-size 3gb
 protected-mode no
 " >> $CONF_FILE
 
