@@ -4,38 +4,13 @@ BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${BASEDIR}" || exit
 
 graceful_timeout="-t 610"
-networkName="e3s-network"
 
 
   start() {
-    # Create network if not exist
-    networkDescription=$(docker network ls -f name=$networkName | grep $networkName)
-    if [ -z "$networkDescription" ]; then
-      # Create network with name $networkName
-      docker network create -d bridge "$networkName" > /dev/null
-      echo "Network $networkName Created"
-    fi
-
     case "$1" in
       "")
-        # start postgres and redis
-        docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" up -d
         # start other services
         docker compose -f "$BASEDIR/docker-compose.yaml" up -d
-        ;;
-
-      data)
-        data_name=$2
-        if [ -z "$data_name" ]; then
-            docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" up -d
-        else
-          docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" up -d --no-deps "$data_name"
-          ret=$?
-          if [ $ret -ne 0 ]; then
-            echo_warning "Failed to start data $data_name"
-            exit 1
-          fi
-        fi
         ;;
 
       service)
@@ -65,22 +40,6 @@ networkName="e3s-network"
       "")
         # stop services
         docker compose -f "$BASEDIR/docker-compose.yaml" stop $docker_flags
-        # stop postgres and redis
-        docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" stop
-        ;;
-
-      data)
-        data_name=$2
-        if [ -z "$data_name" ]; then
-            docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" stop
-        else
-          docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" stop "$data_name"
-          ret=$?
-          if [ $ret -ne 0 ]; then
-            echo_warning "Failed to stop data $data_name"
-            exit 1
-          fi
-        fi
         ;;
 
       service)
@@ -110,22 +69,6 @@ networkName="e3s-network"
       "")
         # down services
         docker compose -f "$BASEDIR/docker-compose.yaml" down $docker_flags
-        # down postgres and redis
-        docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" down
-        ;;
-
-      data)
-        data_name=$2
-        if [ -z "$data_name" ]; then
-            docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" down
-        else
-          docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" down "$data_name"
-          ret=$?
-          if [ $ret -ne 0 ]; then
-            echo_warning "Failed to down data $data_name"
-            exit 1
-          fi
-        fi
         ;;
 
       service)
@@ -157,36 +100,6 @@ networkName="e3s-network"
         if [[ $REPLY =~ ^[Yy]*$ ]]; then
           # shutdown services
           docker compose -f "$BASEDIR/docker-compose.yaml" down -v
-          # shutdown postgres and redis
-          docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" down -v
-
-          networkDescription=$(docker network ls -f name=$networkName | grep $networkName)
-          if [ ! -z "$networkDescription" ]; then
-            # delete network with name $networkName
-            docker network rm $networkName
-          fi
-        fi
-        ;;
-
-      data)
-        data_name=$2
-        if [ -z "$data_name" ]; then
-            echo_warning
-            read -r -p "The entire data layer and its volumes will be deleted. Do you want to continue? (y/n) [y]: "
-            if [[ $REPLY =~ ^[Yy]*$ ]]; then
-              docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" down -v
-            fi
-        else
-          echo_warning
-          read -r -p "$2 and its volumes will be deleted. Do you want to continue? (y/n) [y]: "
-            if [[ $REPLY =~ ^[Yy]*$ ]]; then
-              docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" down -v "$data_name"
-              ret=$?
-              if [ $ret -ne 0 ]; then
-                echo_warning "Failed to shutdown data $data_name"
-                exit 1
-              fi
-            fi
         fi
         ;;
 
@@ -203,7 +116,7 @@ networkName="e3s-network"
               docker compose -f "$BASEDIR/docker-compose.yaml" down -v "$service_name"
               ret=$?
               if [ $ret -ne 0 ]; then
-                echo_warning "Failed to shutdown data $data_name"
+                echo_warning "Failed to shutdown service $service_name"
                 exit 1
               fi
             fi
@@ -212,6 +125,17 @@ networkName="e3s-network"
       *)
         echo_warning "Wrong input"
         exit 1
+        ;;
+    esac
+  }
+
+  logs(){
+    case "$1" in
+      "")
+        docker compose -f "$BASEDIR/docker-compose.yaml" logs -f
+        ;;
+      *)
+        docker logs -f "$1" 2>&1
         ;;
     esac
   }
@@ -316,15 +240,16 @@ networkName="e3s-network"
       Flags:
           --help | -h                       Print help
       Arguments:
-      	  start     [data|service] <name>         Start containers for selected layers
-      	  stop      [data|service] <name>         Stop containers for selected layers
-      	  down      [data|service] <name>         Stop and remove containers for selected layers
-      	  shutdown  [data|service] <name>         Stop, remove containers, clear volumes for selected layers
-      	  restart   [data|service] <name>         Down and start containers for selected layers
-      	  status                                  Show all containers statuses
-          tasks     [list|stop]                   List all tasks or stop them
-      	  describe  [cluster|instance|task]       Describe selected items
-          instances [list]                        All cluster's container-instances list
+      	  start     [service] <name>         Start containers for selected layers
+      	  stop      [service] <name>         Stop containers for selected layers
+      	  down      [service] <name>         Stop and remove containers for selected layers
+      	  shutdown  [service] <name>         Stop, remove containers, clear volumes for selected layers
+      	  restart   [service] <name>         Down and start containers for selected layers
+          logs      [name]                   Follow logs of certain layer/container
+      	  status                             Show all containers statuses
+          tasks     [list|stop]              List all tasks or stop them
+      	  describe  [cluster|instance|task]  Describe selected items
+          instances [list]                   All cluster's container-instances list
       	  "
       echo_telegram
       exit 0
@@ -375,6 +300,9 @@ case "$1" in
     status)
       status
       ;;
+    logs)
+      logs "$2"
+    ;;
     tasks)
       tasks "$2"
       ;;
