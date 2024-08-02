@@ -30,6 +30,4 @@ Suitable for personal usage and in big clusters:
 * Fully **isolated** and **reproducible** environment
 
 ## Documentation 
-* [Prerequisites](docs/prerequisites.md)
-* [ECS E3S cluster creation](docs/ecs_e3s_cluster_creation.md)
 * [Usage](docs/usage.md)
