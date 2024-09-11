@@ -1,0 +1,50 @@
+global:
+  smtp_from: "{gmail_name}"
+  smtp_smarthost: smtp.gmail.com:587
+  smtp_auth_username: "{gmail_name}"
+  smtp_auth_identity: "{gmail_name}"
+  smtp_auth_password: "{gmail_pass}"
+
+route:
+  # Default
+  receiver: admin
+  group_by: ["category", "app_type"]
+  routes:
+    - match_re:
+        app_type: (linux|windows)
+      receiver: abc_sol-admin
+      routes:
+        - match:
+            app_type: linux
+          receiver: abc_sol-linux-admin
+          routes:
+          - match: 
+              severity: critical
+            receiver: abc_sol-linux-team-lead
+          - match: 
+              severity: warning
+            receiver: abc_sol-linux-manager
+        - match:
+            app_type: windows
+          receiver: abc_sol-windows-admin
+
+
+receivers:
+  - name: admin
+    email_configs:
+      - to: "indasto1@gmail.com"
+  - name: abc_sol-admin
+    email_configs:
+      - to: "dgrinevich@zebrunner.com"
+  - name: abc_sol-linux-admin
+    email_configs:
+      - to: "dgrinevich@zebrunner.com"
+  - name: abc_sol-linux-team-lead
+    email_configs:
+      - to: "dgrinevich@solvd.com"
+  - name: abc_sol-linux-manager
+    email_configs:
+      - to: "dgrinevich@zebrunner.com"
+  - name: abc_sol-windows-admin
+    email_configs:
+      - to: "indasto1@gmail.com"

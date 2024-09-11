@@ -1,0 +1,40 @@
+services:
+  prometheus:
+    image: prom/prometheus:v2.54.0
+    volumes:
+      - "./prometheus/:/etc/prometheus/"
+      - "prometheus-data:/prometheus/"
+    networks:
+      - prom
+    ports:
+      - 9090:9090
+  node-exporter:
+    image: prom/node-exporter:v1.8.2
+    networks:
+      - prom
+  alert-manager:
+    image: prom/alertmanager
+    volumes:
+      - "./alertmanager/:/etc/alertmanager/"
+    networks:
+      - prom
+    ports:
+      - 9093:9093
+  grafana:
+    image: grafana/grafana:11.1.4
+    container_name: grafana
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - prom
+    restart: unless-stopped
+networks:
+  prom:
+    driver: bridge
+volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local

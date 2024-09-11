@@ -52,6 +52,20 @@ networkName="e3s-network"
         fi
         ;;
 
+      monitoring)
+        service_name=$2
+        if [ -z "$service_name" ]; then
+            docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" up -d
+        else
+          docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" up -d --no-deps "$service_name"
+          ret=$?
+          if [ $ret -ne 0 ]; then
+            echo_warning "Failed to start monitoring service $service_name"
+            exit 1
+          fi
+        fi
+        ;;
+
       *)
         echo_warning "Wrong input"
         exit 1
@@ -92,6 +106,20 @@ networkName="e3s-network"
           ret=$?
           if [ $ret -ne 0 ]; then
             echo_warning "Failed to stop service $service_name"
+            exit 1
+          fi
+        fi
+        ;;
+
+      monitoring)
+        service_name=$2
+        if [ -z "$service_name" ]; then
+            docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" stop $docker_flags
+        else
+          docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" stop $docker_flags "$service_name"
+          ret=$?
+          if [ $ret -ne 0 ]; then
+            echo_warning "Failed to stop monitoring service $service_name"
             exit 1
           fi
         fi
@@ -142,6 +170,20 @@ networkName="e3s-network"
         fi
         ;;
 
+      monitoring)
+        service_name=$2
+        if [ -z "$service_name" ]; then
+            docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" down $docker_flags
+        else
+          docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" down $docker_flags "$service_name"
+          ret=$?
+          if [ $ret -ne 0 ]; then
+            echo_warning "Failed to down monitoring service $service_name"
+            exit 1
+          fi
+        fi
+        ;;
+
       *)
         echo_warning "Wrong input"
         exit 1
@@ -159,6 +201,8 @@ networkName="e3s-network"
           docker compose -f "$BASEDIR/docker-compose.yaml" down -v
           # shutdown postgres and redis
           docker compose -f "$BASEDIR/data-layer/docker-compose.yaml" down -v
+          # shutdown prometheus and grafana
+          docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" down -v
 
           networkDescription=$(docker network ls -f name=$networkName | grep $networkName)
           if [ ! -z "$networkDescription" ]; then
@@ -209,7 +253,28 @@ networkName="e3s-network"
             fi
         fi
         ;;
+
+      monitoring)
+        service_name=$2
+        if [ -z "$service_name" ]; then
+            read -r -p "The entire service layer and its volumes will be deleted. Do you want to continue? (y/n) [y]: "
+            if [[ $REPLY =~ ^[Yy]*$ ]]; then
+              docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" down -v
+            fi
+        else
+          read -r -p "$2 and its volumes will be deleted. Do you want to continue? (y/n) [y]: "
+            if [[ $REPLY =~ ^[Yy]*$ ]]; then
+              docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" down -v "$service_name"
+              ret=$?
+              if [ $ret -ne 0 ]; then
+                echo_warning "Failed to shutdown data $data_name"
+                exit 1
+              fi
+            fi
+        fi
+        ;;
       *)
+
         echo_warning "Wrong input"
         exit 1
         ;;
@@ -334,16 +399,16 @@ networkName="e3s-network"
       Flags:
           --help | -h                       Print help
       Arguments:
-      	  start     [data|service] <name>         Start containers for selected layers
-      	  stop      [data|service] <name>         Stop containers for selected layers
-      	  down      [data|service] <name>         Stop and remove containers for selected layers
-      	  shutdown  [data|service] <name>         Stop, remove containers, clear volumes for selected layers
-      	  restart   [data|service] <name>         Down and start containers for selected layers
-          logs      [data|service|name]           Follow logs of certain layer/container
-      	  status                                  Show all containers statuses
-          tasks     [list|stop]                   List all tasks or stop them
-      	  describe  [cluster|instance|task]       Describe selected items
-          instances [list]                        All cluster's container-instances list
+      	  start     [data|service|monitoring] <name>  Start containers for selected layers
+      	  stop      [data|service|monitoring] <name>  Stop containers for selected layers
+      	  down      [data|service|monitoring] <name>  Stop and remove containers for selected layers
+      	  shutdown  [data|service|monitoring] <name>  Stop, remove containers, clear volumes for selected layers
+      	  restart   [data|service|monitoring] <name>  Down and start containers for selected layers
+          logs      [data|service|name]               Follow logs of certain layer/container
+      	  status                                      Show all containers statuses
+          tasks     [list|stop]                       List all tasks or stop them
+      	  describe  [cluster|instance|task]           Describe selected items
+          instances [list]                            All cluster's container-instances list
       	  "
       echo_telegram
       exit 0
