@@ -32,19 +32,19 @@ route:
 receivers:
   - name: admin
     email_configs:
-      - to: "indasto1@gmail.com"
+      - to: "{mail}"
   - name: abc_sol-admin
     email_configs:
-      - to: "dgrinevich@zebrunner.com"
+      - to: "{mail}"
   - name: abc_sol-linux-admin
     email_configs:
-      - to: "dgrinevich@zebrunner.com"
+      - to: "{mail}"
   - name: abc_sol-linux-team-lead
     email_configs:
-      - to: "dgrinevich@solvd.com"
+      - to: "{mail}"
   - name: abc_sol-linux-manager
     email_configs:
-      - to: "dgrinevich@zebrunner.com"
+      - to: "{mail}"
   - name: abc_sol-windows-admin
     email_configs:
-      - to: "indasto1@gmail.com"
+      - to: "{mail}"
