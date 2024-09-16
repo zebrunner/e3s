@@ -13,7 +13,7 @@ scrape_configs:
     static_configs:
       - targets:
         - prometheus:9090
-  - job_name: e3s_instance
+  - job_name: e3s
     static_configs:
       - targets:
         - node-exporter:9100
@@ -21,21 +21,21 @@ scrape_configs:
   #   static_configs:
   #     - targets:
   #       - 127.0.0.1:4444
-  - job_name: 'ec2_node_exporter_discovery'
+  - job_name: 'ecs_node'
     ec2_sd_configs:
-      - port: 9100 # referred to nodeExporter exposed port
-        #role_arn: arn:aws:iam::342241566140:role/Ec2-Instance-Role
+      - region: {region}
+        port: 9100
         filters:
         - name: tag:aws:autoscaling:groupName
           values:
           - e3s-{env}-linux-asg
-            e3s-{env}-windows-asg
-  - job_name: ecs_CAdvisor
+          - e3s-{env}-windows-asg
+  - job_name: ecs_cAdvisor
     ec2_sd_configs:
-      - port: 8080 # referred to cAdvisor exposed port
-        #role_arn: arn:aws:iam::342241566140:role/Ec2-Instance-Role
+      - region: {region}
+        port: 8080
         filters:
         - name: tag:aws:autoscaling:groupName
           values:
           - e3s-{env}-linux-asg
-            e3s-{env}-windows-asg
+          - e3s-{env}-windows-asg
