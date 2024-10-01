@@ -1,25 +1,47 @@
 groups:
 
-  - name: cpu_computation
+  - name: RAM
     rules:
-    - record: job:idle_cpu_seconds:avg_per_minute
-      expr: avg without(cpu)(rate(node_cpu_seconds_total{mode='idle'}[1m]))
+    - record: e3s_instance:ram:availiable_percent
+      expr: node_memory_MemAvailable_bytes{job="e3s_instance"}/node_memory_MemTotal_bytes{job="e3s_instance"} * 100
+    - record: linux_instances:ram:availiable_percent
+      expr: node_memory_MemAvailable_bytes{job!="e3s_instance"}/node_memory_MemTotal_bytes{job!="e3s_instance"} * 100
+    # implement for windows
 
-    - record: job:non_idle_cpu_seconds:avg_per_minute
-      expr: avg without(cpu, mode)(rate(node_cpu_seconds_total{mode!='idle'}[1m]))
-        
-  - name: memory_computation
+  - name: CPU
     rules:
-    - record: job:free_memory:percentage
-      expr: (node_memory_MemFree_bytes/node_memory_MemTotal_bytes)*100
+    - record: e3s_instance:cpu:usage_percent_2m_rate
+      expr: avg by (instance) (1 - rate(node_cpu_seconds_total{mode="idle", job="e3s_instance"}[2m]))
+    - record: linux_instances:cpu:usage_percent_2m_rate
+      expr: avg by (instance) (1 - rate(node_cpu_seconds_total{mode="idle", job!="e3s_instance"}[2m]))
+    # implement for windows
 
-    - record: job:busy_memory:percentage
-      expr: (1-(node_memory_MemFree_bytes/node_memory_MemTotal_bytes))*100
-
-    - record: job:node_memory_Mem_bytes:available
-      expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
-
-  - name: requests
+  - name: Storage
     rules:
-    - record: job:go_app_response_latency:rate_1m
-      expr: rate(go_app_response_latency_seconds_sum{path="/user/{name}"}[1m]) /rate(go_app_response_latency_seconds_count{path="/user/{name}"}[1m])
+      - record: e3s_instance:storage:availiable_percent
+        expr: (node_filesystem_avail_bytes{mountpoint="/",job="e3s_instance"}/node_filesystem_size_bytes{mountpoint="/",job="e3s_instance"}) * 100
+      - record: linux_instances:storage:availiable_percent
+        expr: (node_filesystem_avail_bytes{mountpoint="/",job!="e3s_instance"}/node_filesystem_size_bytes{mountpoint="/",job!="e3s_instance"}) * 100
+    # implement for windows
+
+  - name: Network
+    rules:
+    - record: e3s_instance:network:throughput_in_rate_2m
+      expr: sum by (instance) (rate(node_network_receive_bytes_total{job="e3s_instance"}[2m])) / 1024 / 1024
+    - record: e3s_instance:network:throughput_out_rate_2m
+      expr: sum by (instance) (rate(node_network_transmit_bytes_total{job="e3s_instance"}[2m])) / 1024 / 1024
+    - record: linux_instances:network:throughput_in_rate_2m
+      expr: sum by (instance) (rate(node_network_receive_bytes_total{job!="e3s_instance"}[2m])) / 1024 / 1024
+    - record: linux_instances:network:throughput_out_rate_2m
+      expr: sum by (instance) (rate(node_network_transmit_bytes_total{job!="e3s_instance"}[2m])) / 1024 / 1024
+    # implement for windows
+
+  - name: Containers
+    rules:
+    # add group by task
+    - record: linux_instances:container_ram:in_use_percent
+      expr: (sum(container_memory_working_set_bytes{name!=""}) BY (instance, name) / sum(container_spec_memory_limit_bytes > 0) BY (instance, name)) * 100
+    - record: linux_instances:container_cpu:in_use_percent
+      expr: sum(rate(container_cpu_usage_seconds_total{name!=""}[45s])) by (instance, name) / sum(container_spec_cpu_shares{name!=""}/container_spec_cpu_period{name!=""}) by (instance, name)
+
+      # implement for windows

@@ -1,5 +1,5 @@
 global:
-  scrape_interval: 5s
+  scrape_interval: 15s
 rule_files:
   - rules.yml
   - alerts.yml
@@ -7,35 +7,37 @@ alerting:
   alertmanagers:
    - static_configs:
      - targets:
-        - alert-manager:9093
+        - 127.0.0.1:9093
+
+
 scrape_configs:
-  - job_name: prometheus
+  - job_name: e3s_instance
     static_configs:
       - targets:
-        - prometheus:9090
-  - job_name: e3s
-    static_configs:
-      - targets:
-        - node-exporter:9100
-  # - job_name: router_1
-  #   static_configs:
-  #     - targets:
-  #       - 127.0.0.1:4444
-  - job_name: 'ecs_node'
+        - 127.0.0.1:9100
+
+  - job_name: 'ecs_linux_node'
     ec2_sd_configs:
-      - region: {region}
+      - region: us-east-1
         port: 9100
         filters:
         - name: tag:aws:autoscaling:groupName
           values:
-          - e3s-{env}-linux-asg
-          - e3s-{env}-windows-asg
-  - job_name: ecs_cAdvisor
+          - e3s-dev-linux-asg
+  - job_name: ecs_linux_cAdvisor
     ec2_sd_configs:
-      - region: {region}
+      - region: us-east-1
         port: 8080
         filters:
         - name: tag:aws:autoscaling:groupName
           values:
-          - e3s-{env}-linux-asg
-          - e3s-{env}-windows-asg
+          - e3s-dev-linux-asg
+
+  - job_name: ecs_windows_exporter
+    ec2_sd_configs:
+      - region: us-east-1
+        port: 9182
+        filters:
+        - name: tag:aws:autoscaling:groupName
+          values:
+          - e3s-dev-windows-asg
