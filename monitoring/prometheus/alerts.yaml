@@ -1,14 +1,60 @@
-# groups:
+groups:
 
-#   - name: E3SInstanceStorage
-#     rules:
-#     - alert: OutOfMemory
-#       expr: 1 - e3s_instance:storage_memory:free_percent >= 15
-#       for: 2m
-#       labels:
-#         severity: critical
-#         category: server
-#         app_type: linux
+  - name: storage
+    rules:
+    - alert: E3SDiskOutOfSpace
+      expr: (1 - e3s_instance:storage:availiable_percent) < 15
+      for: 10m
+      labels:
+        severity: critical
+        category: e3s_instance
+    - alert: LinuxDiskOutOfSpace
+      expr: (1 - linux_instances:storage:availiable_percent) < 10
+      for: 5m
+      labels:
+        severity: low
+        category: linux_instance
+    - alert: WindowsDiskOutOfSpace
+      expr: (1 - windows_instances:storage:availiable_percent) < 10
+      for: 5m
+      labels:
+        severity: low
+        category: windows_instance
+
+  - name: network
+    rules:
+    - alert: E3SHighNetworkThroughputIn
+      expr: e3s_instance:network:throughput_in_mb_s_rate_2m > 100
+      for: 3m
+      labels:
+        severity: medium
+        category: e3s_instance
+    - alert: E3SHighNetworkThroughputOut
+      expr: e3s_instance:network:throughput_out_mb_s_rate_2m > 100
+      for: 3m
+      labels:
+        severity: medium
+        category: e3s_instance
+
+    - name: cpu
+      rules:
+      - alert: E3SHighCpuLoad 
+        expr: e3s_instance:cpu:usage_percent_2m_rate > 85
+        for: 3m
+        labels:
+          severity: critical
+          category: e3s_instance
+
+    - name: memory
+      rules:
+      - alert: E3SHighMemoryLoad
+        expr: e3s_instance:ram:usage_percent > 85
+        for: 3m
+        labels:
+          severity: critical
+          category: e3s_instance
+
+
 
   # - name: Apl Latency
   #   rules:

@@ -24,6 +24,7 @@ route:
           - match: 
               severity: warning
             receiver: admin
+
         - match:
             app_type: windows
           receiver: admin
