@@ -1,0 +1,102 @@
+groups:
+
+  - name: storage
+    rules:
+    - alert: E3SDiskOutOfSpace
+      expr: (1 - e3s_instance:storage:availiable_percent) < 15
+      for: 10m
+      labels:
+        severity: critical
+        category: e3s_instance
+      annotations:
+        summary: E3S instance disk space (instance {{ $labels.instance }})
+        description: "Disk is almost full (< 15% left)\n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
+    - alert: LinuxDiskOutOfSpace
+      expr: (1 - linux_instances:storage:availiable_percent) < 10
+      for: 5m
+      labels:
+        severity: low
+        category: linux_instance
+      annotations:
+        summary: ASG linux instance disk space (instance {{ $labels.instance }})
+        description: "Disk is almost full (< 10% left)\n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
+    - alert: WindowsDiskOutOfSpace
+      expr: (1 - windows_instances:storage:availiable_percent) < 10
+      for: 5m
+      labels:
+        severity: low
+        category: windows_instance
+      annotations:
+        summary: ASG windows instance disk space (instance {{ $labels.instance }})
+        description: "Disk is almost full (< 10% left)\n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
+
+  - name: network
+    rules:
+    - alert: E3SHighNetworkThroughputIn
+      expr: e3s_instance:network:throughput_in_mb_s_rate_2m > 100
+      for: 3m
+      labels:
+        severity: medium
+        category: e3s_instance
+      annotations:
+        summary: E3S instance unusual network throughput in (instance {{ $labels.instance }})
+        description: "E3S host network is receiving too much data (> 100mb/s)\n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
+    - alert: E3SHighNetworkThroughputOut
+      expr: e3s_instance:network:throughput_out_mb_s_rate_2m > 100
+      for: 3m
+      labels:
+        severity: medium
+        category: e3s_instance
+      annotations:
+        summary: E3S instance unusual network throughput out (instance {{ $labels.instance }})
+        description: "E3S host network is sending too much data (> 100mb/s)\n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
+
+  - name: cpu
+    rules:
+    - alert: E3SHighCpuLoad 
+      expr: e3s_instance:cpu:usage_percent_2m_rate > 85
+      for: 3m
+      labels:
+        severity: critical
+        category: e3s_instance
+      annotations:
+        summary: E3S instance CPU usage (instance {{ $labels.instance }})
+        description: "CPU usage is more than 85%!\n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
+
+  - name: memory
+    rules:
+    - alert: E3SHighMemoryLoad
+      expr: e3s_instance:ram:usage_percent > 85
+      for: 3m
+      labels:
+        severity: critical
+        category: e3s_instance
+      annotations:
+        summary: E3S instance RAM usage (instance {{ $labels.instance }})
+        description: "RAM usage is more than 85%!\n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
+
+
+# implement alerts for every service 
+  # - name: Apl Latency
+  #   rules:
+  #   - alert: Above 4
+  #     expr: job:go_app_response_latency:rate_1m >= 4
+  #     labels:
+  #       severity: critical
+
+  #   - alert: Above 2 Below 5
+  #     expr: 2 <= job:go_app_response_latency:rate_1m <= 4
+  #     labels:
+  #       severity: warning
+
+  # - name: linux-rules
+  #   rules:
+  #   - alert: Go app is down
+  #     expr: up{job="go-appp"} == 0
+  #     for: 10s
+  #     labels:
+  #       sevirity: critical
+  #       app_type: linux
+  #       category: server
+  #     annotations:
+  #       summary: "Go app is not running"
