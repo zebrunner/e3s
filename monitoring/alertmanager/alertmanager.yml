@@ -1,35 +1,23 @@
 global:
-  smtp_from: "{gmail_name}"
+  smtp_from: "{gmail}"
   smtp_smarthost: smtp.gmail.com:587
-  smtp_auth_username: "{gmail_name}"
-  smtp_auth_identity: "{gmail_name}"
-  smtp_auth_password: "{gmail_pass}"
+  smtp_auth_username: "{gmail}"
+  smtp_auth_identity: "{gmail}"
+  smtp_auth_password: "{smtp_pass}"
 
 route:
   # Default
+  group_by: ['category', 'severity']
   receiver: admin
-  group_by: ["category", "app_type"]
   routes:
-    - match_re:
-        app_type: (linux|windows)
-      receiver: admin
-      routes:
-        - match:
-            app_type: linux
-          receiver: admin
-          routes:
-          - match: 
-              severity: critical
-            receiver: admin
-          - match: 
-              severity: warning
-            receiver: admin
-
-        - match:
-            app_type: windows
-          receiver: admin
+  - match: 
+      severity: critical
+    receiver: admin
+  - match: 
+      severity: warning
+    receiver: admin
 
 receivers:
   - name: admin
     email_configs:
-      - to: "{mail}"
+      - to: "{gmail}"
