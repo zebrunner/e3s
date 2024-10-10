@@ -37,6 +37,7 @@ services:
     container_name: grafana
     volumes:
       - grafana-data:/var/lib/grafana
+      - "./grafana/:/etc/grafana/"
     network_mode: "host"
     restart: always
 volumes:
