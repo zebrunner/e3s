@@ -5,14 +5,14 @@ prune: true
 datasources:
   - name: Prometheus
     type: prometheus
-    url: http://10.0.0.235:9090
+    url: http://{e3s_private_ip}:9090
     isDefault: true
     access: proxy
     editable: true
 
   - name: Alertmanager
     type: alertmanager
-    url: http://10.0.0.235:9093
+    url: http://{e3s_private_ip}:9093
     isDefault: false
     access: proxy
     editable: true
