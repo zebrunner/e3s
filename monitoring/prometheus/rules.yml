@@ -1,0 +1,54 @@
+groups:
+
+  - name: RAM
+    rules:
+    - record: e3s_instance:ram:usage_percent
+      expr: (1 - node_memory_MemAvailable_bytes{job="e3s_instance"}/node_memory_MemTotal_bytes{job="e3s_instance"}) * 100
+    - record: linux_instances:ram:usage_percent
+      expr: (1 - node_memory_MemAvailable_bytes{job!="e3s_instance"}/node_memory_MemTotal_bytes{job!="e3s_instance"}) * 100
+    - record: windows_instances:ram:usage_percent
+      expr: (1 - windows_os_physical_memory_free_bytes/windows_cs_physical_memory_bytes) * 100
+
+  - name: CPU
+    rules:
+    - record: e3s_instance:cpu:usage_percent_2m_rate
+      expr: avg by (instance) (1 - rate(node_cpu_seconds_total{mode="idle", job="e3s_instance"}[2m])) * 100
+    - record: linux_instances:cpu:usage_percent_2m_rate
+      expr: avg by (instance) (1 - rate(node_cpu_seconds_total{mode="idle", job!="e3s_instance"}[2m])) * 100
+    - record: windows_instances:cpu:usage_percent_2m_rate
+      expr: avg by (instance) (1 - (rate(windows_cpu_time_total{mode="idle"}[2m]))) * 100
+
+  - name: Storage
+    rules:
+      - record: e3s_instance:storage:availiable_percent
+        expr: (node_filesystem_avail_bytes{mountpoint="/",job="e3s_instance"}/node_filesystem_size_bytes{mountpoint="/",job="e3s_instance"}) * 100
+      - record: linux_instances:storage:availiable_percent
+        expr: group by (instance) (node_filesystem_avail_bytes{mountpoint="/",job!="e3s_instance"}/node_filesystem_size_bytes{mountpoint="/",job!="e3s_instance"}) * 100
+      - record: windows_instances:storage:availiable_percent
+        expr: (sum by (instance) (windows_logical_disk_free_bytes) / sum by (instance) (windows_logical_disk_size_bytes)) * 100
+
+  - name: Network
+    rules:
+    - record: e3s_instance:network:throughput_in_mb_s_rate_2m
+      expr: sum by (instance) (rate(node_network_receive_bytes_total{job="e3s_instance"}[2m])) / 1024 / 1024
+    - record: e3s_instance:network:throughput_out_mb_s_rate_2m
+      expr: sum by (instance) (rate(node_network_transmit_bytes_total{job="e3s_instance"}[2m])) / 1024 / 1024
+    - record: linux_instances:network:throughput_mb_s_rate_2m
+      expr: sum by (instance) (rate(node_network_receive_bytes_total{job!="e3s_instance"}[2m])) / 1024 / 1024
+    - record: linux_instances:network:throughput_out_mb_s_rate_2m
+      expr: sum by (instance) (rate(node_network_transmit_bytes_total{job!="e3s_instance"}[2m])) / 1024 / 1024
+    - record: windows_instances:network:throughput_in_mb_s_rate_2m
+      expr: sum by (instance) (rate(windows_net_bytes_received_total[2m])) / 1024 / 1024
+    - record: windows_instances:network:throughput_out_mb_s_rate_2m
+      expr: sum by (instance) (rate(windows_net_bytes_sent_total[2m])) / 1024 / 1024
+
+  - name: Containers
+    rules:
+    - record: linux_instances:container_ram:in_use_percent
+      expr: (sum(container_memory_working_set_bytes{name!="", name!~"ecs-exporters.+", name!="ecs-agent"}) BY (instance, name) / sum(container_spec_memory_limit_bytes > 0) BY (instance, name)) * 100
+    - record: linux_instances:container_cpu:in_use_percent
+      expr: sum(rate(container_cpu_usage_seconds_total{name!="", name!~"ecs-exporters.+", name!="ecs-agent"}[45s])) by (instance, name) / sum(container_spec_cpu_shares{name!="", name!~"ecs-exporters.+", name!="ecs-agent"}/container_spec_cpu_period{name!="", name!~"ecs-exporters.+", name!="ecs-agent"}) by (instance, name)
+    - record: windows_instances:container_cpu:in_use_percent
+      expr: avg by (container_id) (rate(windows_container_cpu_usage_seconds_total[1m])) * 100
+    - record: windows_instances:container_ram:in_use_mb
+      expr: avg by (container_id) (windows_container_memory_usage_commit_bytes/1024/1024)
