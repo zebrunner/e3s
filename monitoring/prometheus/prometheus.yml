@@ -17,7 +17,7 @@ scrape_configs:
 
   - job_name: 'ecs_linux_node'
     ec2_sd_configs:
-      - region: us-east-1
+      - region: {region}
         port: 9100
         filters:
         - name: tag:aws:autoscaling:groupName
@@ -25,7 +25,7 @@ scrape_configs:
           - e3s-{env}-linux-asg
   - job_name: ecs_linux_cAdvisor
     ec2_sd_configs:
-      - region: us-east-1
+      - region: {region}
         port: 8080
         filters:
         - name: tag:aws:autoscaling:groupName
@@ -34,7 +34,7 @@ scrape_configs:
 
   - job_name: ecs_windows_exporter
     ec2_sd_configs:
-      - region: us-east-1
+      - region: {region}
         port: 9182
         filters:
         - name: tag:aws:autoscaling:groupName
