@@ -1,0 +1,50 @@
+services:
+  prometheus:
+    image: prom/prometheus:v2.54.0
+    volumes:
+      - "./prometheus/:/etc/prometheus/"
+      - "prometheus-data:/prometheus/"
+    # port 9090
+    network_mode: "host"
+    restart: always
+  node-exporter:
+    image: public.ecr.aws/zebrunner/node-exporter:v1.8.2
+    privileged: true
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - "--collector.filesystem.ignored-mount-points='^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'"
+    restart: always
+    # port 9100
+    network_mode: "host"
+    deploy:
+      mode: global
+  alert-manager:
+    image: prom/alertmanager
+    volumes:
+      - "./alertmanager/:/etc/alertmanager/"
+    # port 9093
+    network_mode: "host"
+    restart: always
+  grafana:
+    # port 3000
+    image: grafana/grafana:11.1.4
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=$GRAFANA_USER
+      - GF_SECURITY_ADMIN_PASSWORD=$GRAFANA_PASSWORD
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - "./grafana/:/etc/grafana/"
+    network_mode: "host"
+    restart: always
+volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local

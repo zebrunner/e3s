@@ -1,0 +1,23 @@
+global:
+  smtp_from: "{gmail}"
+  smtp_smarthost: smtp.gmail.com:587
+  smtp_auth_username: "{gmail}"
+  smtp_auth_identity: "{gmail}"
+  smtp_auth_password: "{smtp_pass}"
+
+route:
+  # Default
+  group_by: ['category', 'severity']
+  receiver: admin
+  routes:
+  - match: 
+      severity: critical
+    receiver: admin
+  - match: 
+      severity: warning
+    receiver: admin
+
+receivers:
+  - name: admin
+    email_configs:
+      - to: "{gmail}"
