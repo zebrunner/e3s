@@ -27,6 +27,20 @@ graceful_timeout="-t 610"
         fi
         ;;
 
+      monitoring)
+        service_name=$2
+        if [ -z "$service_name" ]; then
+            docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" up -d
+        else
+          docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" up -d --no-deps "$service_name"
+          ret=$?
+          if [ $ret -ne 0 ]; then
+            echo_warning "Failed to start monitoring service $service_name"
+            exit 1
+          fi
+        fi
+        ;;
+
       *)
         echo_warning "Wrong input"
         exit 1
@@ -51,6 +65,20 @@ graceful_timeout="-t 610"
           ret=$?
           if [ $ret -ne 0 ]; then
             echo_warning "Failed to stop service $service_name"
+            exit 1
+          fi
+        fi
+        ;;
+
+      monitoring)
+        service_name=$2
+        if [ -z "$service_name" ]; then
+            docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" stop $docker_flags
+        else
+          docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" stop $docker_flags "$service_name"
+          ret=$?
+          if [ $ret -ne 0 ]; then
+            echo_warning "Failed to stop monitoring service $service_name"
             exit 1
           fi
         fi
@@ -85,6 +113,20 @@ graceful_timeout="-t 610"
         fi
         ;;
 
+      monitoring)
+        service_name=$2
+        if [ -z "$service_name" ]; then
+            docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" down $docker_flags
+        else
+          docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" down $docker_flags "$service_name"
+          ret=$?
+          if [ $ret -ne 0 ]; then
+            echo_warning "Failed to down monitoring service $service_name"
+            exit 1
+          fi
+        fi
+        ;;
+
       *)
         echo_warning "Wrong input"
         exit 1
@@ -100,6 +142,8 @@ graceful_timeout="-t 610"
         if [[ $REPLY =~ ^[Yy]*$ ]]; then
           # shutdown services
           docker compose -f "$BASEDIR/docker-compose.yaml" down -v
+          # shutdown prometheus and grafana
+          docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" down -v
         fi
         ;;
 
@@ -117,6 +161,26 @@ graceful_timeout="-t 610"
               ret=$?
               if [ $ret -ne 0 ]; then
                 echo_warning "Failed to shutdown service $service_name"
+                exit 1
+              fi
+            fi
+        fi
+        ;;
+
+      monitoring)
+        service_name=$2
+        if [ -z "$service_name" ]; then
+            read -r -p "The entire service layer and its volumes will be deleted. Do you want to continue? (y/n) [y]: "
+            if [[ $REPLY =~ ^[Yy]*$ ]]; then
+              docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" down -v
+            fi
+        else
+          read -r -p "$2 and its volumes will be deleted. Do you want to continue? (y/n) [y]: "
+            if [[ $REPLY =~ ^[Yy]*$ ]]; then
+              docker compose -f "$BASEDIR/monitoring/docker-compose.yaml" down -v "$service_name"
+              ret=$?
+              if [ $ret -ne 0 ]; then
+                echo_warning "Failed to shutdown data $data_name"
                 exit 1
               fi
             fi
@@ -240,16 +304,16 @@ graceful_timeout="-t 610"
       Flags:
           --help | -h                       Print help
       Arguments:
-      	  start     [service] <name>         Start containers for selected layers
-      	  stop      [service] <name>         Stop containers for selected layers
-      	  down      [service] <name>         Stop and remove containers for selected layers
-      	  shutdown  [service] <name>         Stop, remove containers, clear volumes for selected layers
-      	  restart   [service] <name>         Down and start containers for selected layers
-          logs      [name]                   Follow logs of certain layer/container
-      	  status                             Show all containers statuses
-          tasks     [list|stop]              List all tasks or stop them
-      	  describe  [cluster|instance|task]  Describe selected items
-          instances [list]                   All cluster's container-instances list
+      	  start     [service|monitoring] <name>   Start containers for selected layers
+      	  stop      [service|monitoring] <name>   Stop containers for selected layers
+      	  down      [service|monitoring] <name>   Stop and remove containers for selected layers
+      	  shutdown  [service|monitoring] <name>   Stop, remove containers, clear volumes for selected layers
+      	  restart   [service|monitoring] <name>   Down and start containers for selected layers
+          logs      [name]                        Follow logs of certain layer/container
+      	  status                                  Show all containers statuses
+          tasks     [list|stop]                   List all tasks or stop them
+      	  describe  [cluster|instance|task]       Describe selected items
+          instances [list]                        All cluster's container-instances list
       	  "
       echo_telegram
       exit 0
