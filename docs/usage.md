@@ -42,6 +42,7 @@ To be able to configure and start/down/manage e3s services:
 * RESERVE_INSTANCES_PERCENT - Additional weight capacity reservation percent. Default value = 0.25
 * RESERVE_MAX_CAPACITY - Max number of additional weight capacity reservation. Default value = 5
 * INSTANCE_COOLDOWN_TIMEOUT - Time after instance start when shutdown is prohibited on scale down in time.Duration format. Default value = 4 min
+* LOST_TASK_COOLDOWN_TIMEOUT - Time after which an unknown (lost) task in ECS cluster will be removed in time.Duration format. Default value = 60 min
 
 #### Router.env
 
