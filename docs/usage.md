@@ -169,7 +169,7 @@ If the same capability but with different values were passed by prefix and map o
 ##### Execution container capabilities:
 
 * `executorVolumes` - Default: empty. Value type: string. Adds additional writable path/paths to executor container, supports multiple values with "," separetor. 
-Example zebrunner:executorVolumes=/root/.npm or zebrunner:executorVolumes=/root/.npm,/tmp
+</br>Example: `zebrunner:executorVolumes=/root/.npm` or `zebrunner:executorVolumes=/root/.npm,/tmp`
   
 ##### Selenium linux browser capabilities:
 
