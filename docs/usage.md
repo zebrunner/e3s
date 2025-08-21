@@ -166,6 +166,11 @@ If the same capability but with different values were passed by prefix and map o
 * `idleTimeout` - Default: 60(seconds = 1 min). Value type: integer/string (in seconds). Session timeout without any interaction before shutdown. Max value - 1200 (20 min).
 * `maxTimeout` - Default: 86400(seconds = 24 hours). Value type: integer/string (in seconds). Maximum session duration in seconds.
 
+##### Execution container capabilities:
+
+* `executorVolumes` - Default: empty. Value type: string. Adds additional writable path/paths to executor container, supports multiple values with "," separetor. 
+Example zebrunner:executorVolumes=/root/.npm or zebrunner:executorVolumes=/root/.npm,/tmp
+  
 ##### Selenium linux browser capabilities:
 
 * `enableVNC` - Default: true. Value type: bool/string. Enables vnc for session.
