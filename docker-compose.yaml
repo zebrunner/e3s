@@ -2,7 +2,7 @@ name: backend
 services:
   task-definitions:
     container_name: task-definitions
-    image: public.ecr.aws/zebrunner/task-definitions:3.1.3
+    image: public.ecr.aws/zebrunner/task-definitions:3.1.4
     env_file:
       - ./properties/config.env
       - ./properties/task-definitions.env
@@ -10,7 +10,7 @@ services:
     restart: always
   scaler:
     container_name: scaler
-    image: public.ecr.aws/zebrunner/scaler:3.1.3
+    image: public.ecr.aws/zebrunner/scaler:3.1.4
     env_file:
       - ./properties/config.env
       - ./properties/scaler.env
@@ -20,7 +20,7 @@ services:
       - migration
   router_1:
     container_name: router_1
-    image: public.ecr.aws/zebrunner/router:3.1.3
+    image: public.ecr.aws/zebrunner/router:3.1.4
     environment:
       - EXTERNAL_PORT=$ROUTER_PORT_1
     env_file:
@@ -37,7 +37,7 @@ services:
       - task-definitions
   router_2:
     container_name: router_2
-    image: public.ecr.aws/zebrunner/router:3.1.3
+    image: public.ecr.aws/zebrunner/router:3.1.4
     environment:
       - EXTERNAL_PORT=$ROUTER_PORT_2
     env_file:
