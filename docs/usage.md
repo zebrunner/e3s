@@ -43,6 +43,7 @@ To be able to configure and start/down/manage e3s services:
 * RESERVE_MAX_CAPACITY - Max number of additional weight capacity reservation. Default value = 5
 * INSTANCE_COOLDOWN_TIMEOUT - Time after instance start when shutdown is prohibited on scale down in time.Duration format. Default value = 4 min
 * LOST_TASK_COOLDOWN_TIMEOUT - Time after which an unknown (lost) task in ECS cluster will be removed in time.Duration format. Default value = 60 min
+* RECORDING_SHUTDOWN_GRACE_PERIOD - The wait time required to stop recording before sending an exit command to the ECS task in time.Duration format. Default value = 5 sec
 
 #### Router.env
 
@@ -166,6 +167,11 @@ If the same capability but with different values were passed by prefix and map o
 * `idleTimeout` - Default: 60(seconds = 1 min). Value type: integer/string (in seconds). Session timeout without any interaction before shutdown. Max value - 1200 (20 min).
 * `maxTimeout` - Default: 86400(seconds = 24 hours). Value type: integer/string (in seconds). Maximum session duration in seconds.
 
+##### Execution container capabilities:
+
+* `executorVolumes` - Default: empty. Value type: string. Adds additional writable path/paths to executor container, supports multiple values with "," separetor. 
+</br>Example: `zebrunner:executorVolumes=/root/.npm` or `zebrunner:executorVolumes=/root/.npm,/tmp`
+  
 ##### Selenium linux browser capabilities:
 
 * `enableVNC` - Default: true. Value type: bool/string. Enables vnc for session.
