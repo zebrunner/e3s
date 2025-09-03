@@ -34,6 +34,7 @@ To be able to configure and start/down/manage e3s services:
 * IDLE_TIMEOUT - Session idle timeout in time.Duration format. Default value = 1 min
 * MAX_TIMEOUT - Maximum valid task/session timeout in time.Duration format. Default value = 24 hours
 * LOG_LEVEL - Desired log level. Valid levels: `panic`, `fatal`, `error`, `warning`, `info`, `debug`, `trace`. Default value = debug
+* RECORDING_SHUTDOWN_GRACE_PERIOD - The wait time required to stop recording before sending an exit command to the ECS task in time.Duration format. Default value = 5 sec
 
 #### Scaler.env
 
@@ -43,7 +44,6 @@ To be able to configure and start/down/manage e3s services:
 * RESERVE_MAX_CAPACITY - Max number of additional weight capacity reservation. Default value = 5
 * INSTANCE_COOLDOWN_TIMEOUT - Time after instance start when shutdown is prohibited on scale down in time.Duration format. Default value = 4 min
 * LOST_TASK_COOLDOWN_TIMEOUT - Time after which an unknown (lost) task in ECS cluster will be removed in time.Duration format. Default value = 60 min
-* RECORDING_SHUTDOWN_GRACE_PERIOD - The wait time required to stop recording before sending an exit command to the ECS task in time.Duration format. Default value = 5 sec
 
 #### Router.env
 
