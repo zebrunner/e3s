@@ -1,0 +1,94 @@
+{
+    "Statement": [
+        {
+            "Action": [
+                "ecs:RegisterTaskDefinition",
+                "ecs:ListTasks",
+                "ec2:DescribeInstances",
+                "ec2:DescribeInstanceStatus",
+                "ec2:DescribeInstanceTypes",
+                "elasticloadbalancing:DescribeTargetGroups",
+                "elasticloadbalancing:DescribeLoadBalancers",
+                "elasticloadbalancing:DescribeListeners",
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeAutoScalingInstances"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Sid": "WithoutConstraints"
+        },
+        {
+            "Action": [
+                "ecs:DescribeContainerInstances",
+                "ecs:DescribeTasks",
+                "ecs:StopTask",
+                "ecs:DescribeClusters",
+                "ecs:ListContainerInstances",
+                "ecs:RunTask",
+                "ecs:DescribeCapacityProviders",
+                "ecs:UpdateContainerInstancesState"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:ecs:<REGION_>:<ACCOUNT_ID>:container-instance/esg-qa-newest-cluster/*",
+                "arn:aws:ecs:<REGION_>:<ACCOUNT_ID>:task/esg-qa-newest-cluster/*",
+                "arn:aws:ecs:<REGION_>:<ACCOUNT_ID>:cluster/esg-qa-newest-cluster",
+                "arn:aws:ecs:<REGION_>:<ACCOUNT_ID>:task-definition/esg-qa-newest-*",
+                "arn:aws:ecs:<REGION_>:<ACCOUNT_ID>:capacity-provider/esg-qa-newest-capacity-provider"
+            ],
+            "Sid": "ECS"
+        },
+        {
+            "Action": [
+                "autoscaling:TerminateInstanceInAutoScalingGroup",
+                "autoscaling:SetInstanceProtection",
+                "autoscaling:SetDesiredCapacity"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:autoscaling:<REGION_>:<ACCOUNT_ID>:autoScalingGroup:*:autoScalingGroupName/esg-qa-newest-asg",
+            "Sid": "Autoscaling"
+        },
+        {
+            "Action": [
+                "elasticloadbalancing:RegisterTargets",
+                "elasticloadbalancing:DeregisterTargets"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:elasticloadbalancing:<REGION_>:<ACCOUNT_ID>:targetgroup/esg-qa-newest-tg*",
+            "Sid": "ELB"
+        },
+        {
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::esg-qa-newest-bucket",
+                "arn:aws:s3:::esg-qa-newest-bucket/*"
+            ],
+            "Sid": "S3"
+        },
+        {
+            "Action": [
+                "iam:passRole"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:iam::<ACCOUNT_ID>:role/esg-qa-newest-task-role",
+            "Sid": "IAM"
+        },
+        {
+            "Action": [
+                "ssm:UpdateInstanceInformation",
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Sid": "SSM"
+        }
+    ],
+    "Version": "2012-10-17"
+}
