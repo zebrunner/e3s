@@ -25,8 +25,8 @@
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:ecs:<REGION_>:<ACCOUNT_ID>:cluster/esg-qa-newest-cluster",
-                "arn:aws:ecs:<REGION_>:<ACCOUNT_ID>:container-instance/esg-qa-newest-cluster/*"
+                "arn:aws:ecs:<REGION>:<ACCOUNT_ID>:cluster/<ZEBRUNNER_ENV>-cluster",
+                "arn:aws:ecs:<REGION>:<ACCOUNT_ID>:container-instance/<ZEBRUNNER_ENV>-cluster/*"
             ],
             "Sid": "ECS"
         },

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Amazon ECS stores logs in the /var/log/ecs folder of your container instances
-echo ECS_CLUSTER=esg-qa-newest-cluster >> /etc/ecs/ecs.config
+echo ECS_CLUSTER=<ZEBRUNNER_ENV>-cluster >> /etc/ecs/ecs.config
 echo ECS_LOGLEVEL=info >> /etc/ecs/ecs.config
 echo ECS_LOGLEVEL_ON_INSTANCE=info >> /etc/ecs/ecs.config
 echo ECS_AVAILABLE_LOGGING_DRIVERS="[\"json-file\",\"awslogs\"]" >> /etc/ecs/ecs.config

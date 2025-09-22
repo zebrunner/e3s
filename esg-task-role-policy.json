@@ -6,7 +6,7 @@
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::esg-qa-newest-bucket/*"
+                "arn:aws:s3:::<ZEBRUNNER_ENV>-bucket/*"
             ]
         }
     ],
