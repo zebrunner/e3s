@@ -124,7 +124,21 @@ Role creation:
 3. Attach policy from template provided in file: ==`esg-node-role-policy.json`==.
    Replace `<REGION>` with your region and `<ACCOUNT_ID>` with account id.
    Replace `<ZEBRUNNER_ENV>` with the prefix you choose to use or replace the entire cluster name with your own custom name.
-
+4. Check/modify trust relations to be as provided bellow:
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "ec2.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+```   
 #### 5. Create/modify launch template
 This step is about creating a launch template for your worker nodes. The `user data` used in the launch template connects the created worker nodes to the cluster and provides the basic configuration.
 
@@ -249,6 +263,21 @@ ECS task IAM role creation:
 2. Create a new role (Suggested name: ==esg-qa-task-role==)
 3. Attach policy from template provided in file: ==`esg-task-role-policy.json`==.
    Replace `<ZEBRUNNER_ENV>` with the prefix you choose to use or replace the entire bucket name with your own custom name.
+4. Check/modify trust relations to be as provided bellow:
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+```
 #### 13. Create ESG server instance IAM role.
 This *role/policy* is required for the ESG server. It provides the ESG server with access to manage the necessary resources to run and monitor QA automated tests.
 
@@ -260,6 +289,21 @@ ESG server instance IAM role creation:
 3. Attach policy from template provided in file: ==`esg-server-role-policy.json`==.
    Replace `<REGION>` with your region and `<ACCOUNT_ID>` with account id.
    Replace `<ZEBRUNNER_ENV>` with the prefix you choose to use or replace the entire names with your own custom names.
+4. Check/modify trust relations to be as provided bellow:
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "ec2.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+```   
 ##### 13.1. Attach server IAM role.
 1. Navigate to EC2 service, find your server instance.
 2. Attach IAM ==esg-qa-server-role== (or your IAM from step 13) to your ESG server instance (instance from Step 2).
