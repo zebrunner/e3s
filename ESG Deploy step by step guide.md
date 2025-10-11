@@ -252,6 +252,7 @@ Load Balancer creation:
    * Listeners and routing: protocol HTTPS, port 443, Default action - select ==esg-qa-tg== (or your target group form step 10).
    * Select the certificate source from ACM, if applicable.
    * Other options left default.
+3. Select recently created load balancer, navigate to Attributes panel, set Connection idle timeout = 630 seconds.  
 
 #### 12. Create ECS task IAM role.
 This *Role/Policy* is required for ECS tasks. It gives basic access needed to send artifacts to s3 bucket. 
