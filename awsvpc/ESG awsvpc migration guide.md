@@ -48,8 +48,8 @@ Use /23 or larger for stable production use. (Usable IPs ~507+)
 
 ```
 # AWSVPC settings
-# SUBNETS AND SECURITY_GROUPS formating example: SECURITY_GROUPS=sg-1;sg-2 and SUBNETS=subnet-1;subnet-2;subnet-3
-SECURITY_GROUPS=sg-1;sg-1
+# SUBNETS AND SECURITY_GROUPS formating example: SECURITY_GROUPS=sg-1,sg-2 and SUBNETS=subnet-1,subnet-2,subnet-3
+SECURITY_GROUPS=sg-1,sg-2
 SUBNETS=subnet-1
 ```
 
