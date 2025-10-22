@@ -189,9 +189,10 @@ Auto Scaling group configuration:
 1. Navigate to EC2 service, Auto Scaling groups.
 2. Open auto scaling group ==esg-qa-asg== (or your auto scaling group form Step 6)
 3. Navigate to Automatic scaling
-4. Change Dynamic scaling policies
+4.1. Change Dynamic scaling policies (optional, if you want additional EC2 instances control from AWS side)
    Change field ***Instances need*** with value - 10 seconds to warm up before including in metric.
-5. Create Predictive scaling policies:
+4.2. Change Dynamic scaling policies -> Select -> Actions -> Disable (**recommended**, only ESG control EC2 instances)
+5. Create Predictive scaling policies (optional): 
    Turn on scaling - on.
    Metrics and target utilization - cpu 100%.
    Other options leave default.
