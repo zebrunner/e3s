@@ -34,7 +34,6 @@ To be able to configure and start/down/manage e3s services:
 * IDLE_TIMEOUT - Session idle timeout in time.Duration format. Default value = 1 min
 * MAX_TIMEOUT - Maximum valid task/session timeout in time.Duration format. Default value = 24 hours
 * LOG_LEVEL - Desired log level. Valid levels: `panic`, `fatal`, `error`, `warning`, `info`, `debug`, `trace`. Default value = debug
-* RECORDING_SHUTDOWN_GRACE_PERIOD - The wait time required to stop recording before sending an exit command to the ECS task in time.Duration format. Default value = 0 sec;
 
 #### Scaler.env
 
@@ -60,6 +59,7 @@ To be able to configure and start/down/manage e3s services:
 * USE_PUBLIC_IP=true/false. Default value = false
 * SERVICE_STARTUP_TIMEOUT - Task and session startup timeout in time.Duration format. Default value = 10 min
 * SESSION_DELETE_TIMEOUT - Session delete timeout in time.Duration format. Default value = 30 sec
+* AWS_LINUX_GENERIC_CAPACITY_PROVIDER – Optional capacity provider that allows using a separate ASG for generic tasks. Default value = "".
 
 #### Data.env
 
