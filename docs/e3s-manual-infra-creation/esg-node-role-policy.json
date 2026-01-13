@@ -1,0 +1,47 @@
+{
+    "Statement": [
+        {
+            "Action": [
+                "ecs:DiscoverPollEndpoint",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "ecr:GetAuthorizationToken",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Sid": "WithoutConstraints"
+        },
+        {
+            "Action": [
+                "ecs:DeregisterContainerInstance",
+                "ecs:RegisterContainerInstance",
+                "ecs:Submit*",
+                "ecs:StartTelemetrySession",
+                "ecs:UpdateContainerInstancesState",
+                "ecs:Poll"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:ecs:<REGION>:<ACCOUNT_ID>:cluster/<ZEBRUNNER_ENV>-cluster",
+                "arn:aws:ecs:<REGION>:<ACCOUNT_ID>:container-instance/<ZEBRUNNER_ENV>-cluster/*"
+            ],
+            "Sid": "ECS"
+        },
+        {
+            "Action": [
+                "ssm:UpdateInstanceInformation",
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Sid": "SSM"
+        }
+    ],
+    "Version": "2012-10-17"
+}
