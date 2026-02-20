@@ -15,8 +15,7 @@
     {
       "Effect": "Allow",
       "Action": [
-        "ecs:PutAccountSetting",
-        "ecs:PutAccountSettingDefault"
+        "ecs:PutAccountSetting"
       ],
       "Resource": "*"
     }
