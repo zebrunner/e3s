@@ -202,6 +202,11 @@ S3 bucket creation:
 1. Navigate to s3 service, create s3 bucket (Suggested name: ==esg-qa-bucket==)
 2. Use default settings (block all public access).
 
+After creating the bucket:
+
+* Verify S3 connectivity from private subnets in your current VPC.
+* If private subnets use a NAT gateway, S3 access works through NAT; however, adding an S3 Gateway VPC endpoint is recommended to reduce NAT traffic and cost.
+
 #### 9. Create/check a security group for ESG server instance
 This step is about creating a security group for the ESG server instance. You can skip this step if you already have a security group as described here.
 
