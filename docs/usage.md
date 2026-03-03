@@ -34,7 +34,15 @@ To be able to configure and start/down/manage e3s services:
 * IDLE_TIMEOUT - Session idle timeout in time.Duration format. Default value = 1 min
 * MAX_TIMEOUT - Maximum valid task/session timeout in time.Duration format. Default value = 24 hours
 * LOG_LEVEL - Desired log level. Valid levels: `panic`, `fatal`, `error`, `warning`, `info`, `debug`, `trace`. Default value = debug
+* AWS_RETRY - Retry count for AWS requests. Default value = 10
 * AWS_TARGET_ID - specify instance ID for ELB target registration when using static AWS credentials.
+* AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY - Optional static AWS credentials.
+* S3_AWS_ACCESS_KEY_ID / S3_AWS_SECRET_ACCESS_KEY - Optional static credentials for S3.
+* AWS_LOGS_GROUP - Optional CloudWatch logs group override.
+* ECS_TASK_TAGS - Optional ECS task tags in `key=value` comma-separated format.
+* ECS_TASK_DEFINITION_TAGS - Optional ECS task definition tags in `key=value` comma-separated format.
+* ZEBRUNNER_HOST - Optional Zebrunner Testing Platform host.
+* ZEBRUNNER_INTEGRATION_USER / ZEBRUNNER_INTEGRATION_PASSWORD - Optional credentials for Zebrunner integration.
 
 #### Scaler.env
 
@@ -57,10 +65,12 @@ To be able to configure and start/down/manage e3s services:
 
 ##### Optional variables
 
+* API_ACCESS_KEY - API access key for router authorization.
 * USE_PUBLIC_IP=true/false. Default value = false
 * SERVICE_STARTUP_TIMEOUT - Task and session startup timeout in time.Duration format. Default value = 10 min
 * SESSION_DELETE_TIMEOUT - Session delete timeout in time.Duration format. Default value = 30 sec
 * AWS_LINUX_GENERIC_CAPACITY_PROVIDER – Optional capacity provider that allows using a separate ASG for generic tasks. Default value = "".
+* E3S_URL - Should be set only when `AWS_TARGET_GROUP` is empty.
 
 #### Data.env
 
@@ -68,7 +78,8 @@ To be able to configure and start/down/manage e3s services:
 
 * POSTGRES_PASSWORD - Password of user, passed in DATABASE var
 * DATABASE - Address to postgres
-* AWS_ELASTIC_CACHE - Address to redis
+* ELASTIC_CACHE - Address to redis
+* CACHE_REMOTE - Enables/disables remote cache usage. Default value = false
 * DEFINITIONS_CONNECTION - Address to task-definitions service
 
 #### Task-definitions.env
@@ -80,6 +91,7 @@ To be able to configure and start/down/manage e3s services:
 ##### Optional variables
 
 * EXCLUDE_BROWSERS - Excludes selected browser images from registering them as a task definition. Default value = empty
+* TASK_DEFINITIONS_UPDATE_INTERVAL - Task definitions update interval in `time.Duration` format.
 
 ### E3S server process management
 
