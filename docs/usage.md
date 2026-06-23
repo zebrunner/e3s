@@ -186,6 +186,8 @@ If the same capability but with different values were passed by prefix and map o
 
 * `executorVolumes` - Default: empty. Value type: string. Adds additional writable path/paths to executor container, supports multiple values with "," separetor. 
 </br>Example: `zebrunner:executorVolumes=/root/.npm` or `zebrunner:executorVolumes=/root/.npm,/tmp`
+* `executorProfiles` - Default: auto-detected from the executor image name. Value type: string. Comma-separated list of generic executor profiles to enable for the session. Supported values: `maven`, `python`, `gradle`, `playwright`.
+</br>Example: `zebrunner:executorProfiles=maven` or `zebrunner:executorProfiles=maven,playwright`. Can also be set per session via the `EXECUTOR_PROFILES` environment variable (same format). Server-wide image-to-profile mapping is configured via `GENERIC_EXECUTOR_IMAGE_PROFILES` in config.env.
   
 ##### Selenium linux browser capabilities:
 
