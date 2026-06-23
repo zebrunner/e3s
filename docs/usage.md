@@ -43,6 +43,8 @@ To be able to configure and start/down/manage e3s services:
 * ECS_TASK_DEFINITION_TAGS - Optional ECS task definition tags in `key=value` comma-separated format.
 * ZEBRUNNER_HOST - Optional Zebrunner Testing Platform host.
 * ZEBRUNNER_INTEGRATION_USER / ZEBRUNNER_INTEGRATION_PASSWORD - Optional credentials for Zebrunner integration.
+* Helper container image overrides - Optional full image URLs that replace the built-in defaults (leave empty to keep the default): `UPLOADER_IMAGE`, `MITM_IMAGE`, `RECORDER_IMAGE`, `CYPRESS_RECORDER_IMAGE`, `APPIUM_IMAGE`, `CLONE_IMAGE`, `ENTRYPOINT_IMAGE`, `MAVEN_IMAGE`, `WIN_UPLOADER_IMAGE`, `WIN_RECORDER_IMAGE`.
+* GENERIC_EXECUTOR_IMAGE_PROFILES - Optional JSON map of generic executor profiles to image name matchers. Example: `{"maven":["openjdk21","mavenjdk"],"playwright":["node","playwright"]}`.
 
 #### Scaler.env
 
