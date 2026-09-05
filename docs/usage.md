@@ -43,7 +43,7 @@ To be able to configure and start/down/manage e3s services:
 * ECS_TASK_DEFINITION_TAGS - Optional ECS task definition tags in `key=value` comma-separated format.
 * ZEBRUNNER_HOST - Optional Zebrunner Testing Platform host.
 * ZEBRUNNER_INTEGRATION_USER / ZEBRUNNER_INTEGRATION_PASSWORD - Optional credentials for Zebrunner integration.
-* Helper container image overrides - Optional full image URLs that replace the built-in defaults (leave empty to keep the default): `UPLOADER_IMAGE`, `MITM_IMAGE`, `RECORDER_IMAGE`, `CYPRESS_RECORDER_IMAGE`, `APPIUM_IMAGE`, `CLONE_IMAGE`, `ENTRYPOINT_IMAGE`, `MAVEN_IMAGE`, `WIN_UPLOADER_IMAGE`, `WIN_RECORDER_IMAGE`.
+* Helper container image overrides - Optional full image URLs that replace the built-in defaults (leave empty to keep the default): `UPLOADER_IMAGE`, `MITM_IMAGE`, `RECORDER_IMAGE`, `CYPRESS_RECORDER_IMAGE`, `CLONE_IMAGE`, `ENTRYPOINT_IMAGE`, `MAVEN_IMAGE`, `WIN_UPLOADER_IMAGE`, `WIN_RECORDER_IMAGE`.
 * GENERIC_EXECUTOR_IMAGE_PROFILES - Optional JSON map of generic executor profiles to image name matchers. Example: `{"maven":["openjdk21","mavenjdk"],"playwright":["node","playwright"]}`.
 
 #### Scaler.env
@@ -72,6 +72,7 @@ To be able to configure and start/down/manage e3s services:
 * SERVICE_STARTUP_TIMEOUT - Task and session startup timeout in time.Duration format. Default value = 10 min
 * SESSION_DELETE_TIMEOUT - Session delete timeout in time.Duration format. Default value = 30 sec
 * AWS_LINUX_GENERIC_CAPACITY_PROVIDER – Optional capacity provider that allows using a separate ASG for generic tasks. Default value = "".
+* ROOT_CA_CERT – Optional base64-encoded PEM CA certificate injected into browser containers as the `ROOT_CA_custom` env var. Can be overridden per session via the `rootCACert` capability. Default value = "".
 * E3S_URL - Should be set only when `AWS_TARGET_GROUP` is empty.
 
 #### Data.env
@@ -88,7 +89,7 @@ To be able to configure and start/down/manage e3s services:
 
 ##### Required variables
 
-* IMAGE_REPOSITORIES - Repositories with supported browsers
+* IMAGE_REPOSITORIES - Repositories with supported browsers. Valid names: `chrome`, `firefox`, `edge`, `windows-chrome`, `windows-edge`, `windows-firefox`, `cypress-chrome`, `cypress-chromium`, `cypress-edge`, `cypress-firefox`, `playwright`. To enable Windows Firefox or Playwright, add `windows-firefox` and/or `playwright` to the list.
 
 ##### Optional variables
 
@@ -188,6 +189,8 @@ If the same capability but with different values were passed by prefix and map o
 </br>Example: `zebrunner:executorVolumes=/root/.npm` or `zebrunner:executorVolumes=/root/.npm,/tmp`
 * `executorProfiles` - Default: auto-detected from the executor image name. Value type: string. Comma-separated list of generic executor profiles to enable for the session. Supported values: `maven`, `python`, `gradle`, `playwright`.
 </br>Example: `zebrunner:executorProfiles=maven` or `zebrunner:executorProfiles=maven,playwright`. Can also be set per session via the `EXECUTOR_PROFILES` environment variable (same format). Server-wide image-to-profile mapping is configured via `GENERIC_EXECUTOR_IMAGE_PROFILES` in config.env.
+* `downloadUrls` - Default: empty. Value type: string. Downloads files into the generic executor before the run. Format: `url>destination` pairs separated by ",", where destination is the full file path inside the container. The destination directory is auto-mounted as a shared volume between the clone and executor containers.
+</br>Example: `zebrunner:downloadUrls=https://example.com/app.apk>/tmp/downloads/app.apk,https://example.com/data.zip>/tmp/downloads/data.zip`
   
 ##### Selenium linux browser capabilities:
 
@@ -200,10 +203,25 @@ If the same capability but with different values were passed by prefix and map o
 * `dnsServers` - Default: -. Value type: string array. Selenoid's [dnsServers](https://aerokube.com/selenoid/latest/#_custom_dns_servers_dnsservers) capability.
 * `timeZone` - Default: utc 0. Value type: string. Specifies a particular time zone in operating system for the session. Example: Asia/Kolkata.
 * `mitm` (alias: `Mitm`) - Default: false. Value type: bool/string. Enables mitm proxy. Usage tracker includes allocated resources for mitm container.
+* `rootCACert` (aliases: `RootCACert`, `rootcacert`) - Default: value of the `ROOT_CA_CERT` server option. Value type: string. Base64-encoded PEM CA certificate injected into the browser container as the `ROOT_CA_custom` env var. Must be valid base64, max 4096 characters.
 
 ##### Selenium windows browser capabilities
 
 * `screenResolution` - Default: 1920x1080x24. Value type: string. Determines session screen resolution. Could be passed only as full or short resolution format. Min screen resolution is 40x30. Max aspect ratio is 1:6 or 6:1.
+* Windows Firefox is supported in addition to Chrome and Edge. Requires `windows-firefox` in `IMAGE_REPOSITORIES`.
+
+##### Playwright capabilities
+
+Playwright desktop browsers run on the `playwright` platform (`platformName=playwright`). The session has no WebDriver endpoint: it is created with `POST /wd/hub/session` and the returned `sessionId` is used to attach over WebSocket at `/ws/playwright/<sessionId>`.
+
+* `browserName` - Required. Value type: string. Supported: `chromium`, `chrome`, `edge`, `firefox`, `webkit`. `chrome` and `edge` resolve to `chromium` (the image ships no branded channels).
+* `playwrightVersion` - Required. Value type: string. Playwright release used as the image tag (there is no `latest` tag). Example: `1.58.2`. `browserVersion` is accepted as a legacy alias.
+* `playwrightArgs` - Default: empty. Value type: string. Extra browser launch flags passed to the browser.
+* `headless` - Default: false. Value type: bool/string. Runs the browser in headless mode.
+
+A running Playwright task can swap its browser via `POST /playwright/<sessionId>/refresh` (optional body: `browserName`, `playwrightArgs`, `headless`). Each refresh returns a new `sessionId` that resolves back to the original session, so teardown, idle tracking and billing stay on one task.
+
+`GET /browsers` lists each registered Playwright image as three engine entries: `chromium`, `firefox`, and `webkit`.
 
 #### Browsers resource allocation
 
@@ -214,10 +232,10 @@ If the same capability but with different values were passed by prefix and map o
 
 | Environment            | Min (cpu, memory) | Default (cpu, memory) |
 | ---------------------- | ----------------- | --------------------- |
-| Emulators (appium)     | 2048, 2048        | 2048, 2048            |
 | Cypress                | 1024, 2048        | 1024, 2048            |
 | Linux browser          | 1024, 1024        | 1024, 1024            |
 | Windows browser        | 1024, 1024        | 1024, 1024            |
+| Playwright             | 1024, 2048        | 1024, 2048            |
 
 > Max limitation for mitmCpu/mitmMemory is configurable uniquely for every E3S server. Max values by default are also: cpu: 16384, memory: 28675.
 * `mitmCpu` (alias: `MitmCpu`, `mitmcpu`) - Min: 512. Default: 512.Value type: integer/string. CPU limitation for mitm container measured in [aws units](https://repost.aws/knowledge-center/ecs-cpu-allocation). 
