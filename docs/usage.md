@@ -89,7 +89,7 @@ To be able to configure and start/down/manage e3s services:
 
 ##### Required variables
 
-* IMAGE_REPOSITORIES - Repositories with supported browsers. Valid names: `chrome`, `firefox`, `edge`, `windows-chrome`, `windows-edge`, `windows-firefox`, `cypress-chrome`, `cypress-chromium`, `cypress-edge`, `cypress-firefox`, `playwright`. To enable Windows Firefox or Playwright, add `windows-firefox` and/or `playwright` to the list.
+* IMAGE_REPOSITORIES - Repositories with supported browsers. Valid names: `chrome`, `firefox`, `edge`, `windows-chrome`, `windows-edge`, `cypress-chrome`, `cypress-chromium`, `cypress-edge`, `cypress-firefox`, `playwright`. The default list includes `playwright`.
 
 ##### Optional variables
 
