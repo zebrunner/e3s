@@ -62,17 +62,22 @@ To be able to configure and start/down/manage e3s services:
 * AWS_LINUX_CAPACITY_PROVIDER=e3s-{Env}-capacityprovider
 * AWS_WIN_CAPACITY_PROVIDER=e3s-{Env}-win-capacityprovider
 * AWS_TARGET_GROUP=e3s-{Env}-tg
+* SECURITY_GROUPS=sg-1,sg-2
+* SUBNET=subnet-1
 * S3_BUCKET={S3-bucket}
 * S3_REGION={Region}
 
 ##### Optional variables
 
 * API_ACCESS_KEY - API access key for router authorization.
-* USE_PUBLIC_IP=true/false. Default value = false
 * SERVICE_STARTUP_TIMEOUT - Task and session startup timeout in time.Duration format. Default value = 10 min
 * SESSION_DELETE_TIMEOUT - Session delete timeout in time.Duration format. Default value = 30 sec
 * AWS_LINUX_GENERIC_CAPACITY_PROVIDER – Optional capacity provider that allows using a separate ASG for generic tasks. Default value = "".
 * E3S_URL - Should be set only when `AWS_TARGET_GROUP` is empty.
+
+The AWS VPC configuration requires one subnet. Configure the Auto Scaling Group to use the same subnet as `SUBNET`.
+
+The security groups must permit traffic from the E3S server to the task ports.
 
 #### Data.env
 
