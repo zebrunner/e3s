@@ -110,6 +110,9 @@ Required **Inbound** rule:
 
 > **Important note**: Source is your ESG server instance ip address (ip/32).
 > Instead of *10.0.0.5/32* use your ESG server instance ip.
+>
+> This inbound rule is for ECS bridge network mode (`main` and `main-local`).
+> For AWS VPC network mode, use the inbound ports in the [AWS VPC migration guide](awsvpc-migration/ESG%20awsvpc%20migration%20guide.md).
 
 **Outbound** rules: default, allow all traffic. 
 
@@ -324,36 +327,61 @@ Example how ==config.env== will look, if you used suggested infrastructure eleme
 ```env
 IDLE_TIMEOUT=
 MAX_TIMEOUT=
-RECORDING_SHUTDOWN_GRACE_PERIOD=0s
 
 # AWS settings
 AWS_REGION=<YOUR_REGION>
 AWS_RETRY=10
 AWS_CLUSTER=esg-qa-cluster
-AWS_ACESS_KEY_ID=
+
+AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
+# Instance ID for ELB target registration (required when static AWS credentials are configured and using target group)
+AWS_TARGET_ID=
+
 AWS_TASK_ROLE=esg-qa-task-role
 
 # S3 settings
 S3_BUCKET=esg-qa-bucket
 S3_REGION=<YOUR_REGION_BUCKET_REGION>
-S3_AWS_ACESS_KEY_ID=
+S3_AWS_ACCESS_KEY_ID=
 S3_AWS_SECRET_ACCESS_KEY=
 
 # Log level: trace, debug, info, error etc
 LOG_LEVEL=info
 AWS_LOGS_GROUP=
 
+# ECS tags in key=value format separated by commas
+# For task definitions: if "Name" is not provided, it defaults to the task definition family:revision
+# Example: ECS_TASK_TAGS=environment=prod,app=esg
+ECS_TASK_TAGS=
+ECS_TASK_DEFINITION_TAGS=
+
 # Zebrunner Testing Platform integration
 ZEBRUNNER_HOST=
 ZEBRUNNER_INTEGRATION_USER=
 ZEBRUNNER_INTEGRATION_PASSWORD=
-
+# Should be specified if task definition register was restricted by "arn:aws:ecs:{Region}:{Account}:task-definition/{Env}-*" resource
 ZEBRUNNER_ENV=esg-qa
+
+# Override the helper container images with a full image URL (e.g. public.ecr.aws/zebrunner/m2-repo-carina:1.5)
+# Leave empty to keep the built-in default.
+UPLOADER_IMAGE=
+MITM_IMAGE=
+RECORDER_IMAGE=
+CYPRESS_RECORDER_IMAGE=
+CLONE_IMAGE=
+ENTRYPOINT_IMAGE=
+MAVEN_IMAGE=
+WIN_UPLOADER_IMAGE=
+WIN_RECORDER_IMAGE=
+
+# JSON map of generic executor profiles to image name matchers.
+# Example: {"maven":["openjdk21","mavenjdk"],"playwright":["node","playwright"]}
+GENERIC_EXECUTOR_IMAGE_PROFILES=
 ```
 
-You need to replace <YOUR_REGION> and <YOUR_REGION_BUCKET_REGION> placeholders with your AWS region. 
-For example: AWS_REGION=us-east-1 and S3_REGION=us-east-1.
+Replace the `<YOUR_REGION>` and `<YOUR_REGION_BUCKET_REGION>` placeholders with your AWS region.
+Example: `AWS_REGION=us-east-1` and `S3_REGION=us-east-1`.
 
 ##### 2. Router.env
 
@@ -373,11 +401,18 @@ AWS_LINUX_CAPACITY_PROVIDER=esg-qa-capacity-provider
 #AWS_WIN_CAPACITY_PROVIDER=
 AWS_TARGET_GROUP=esg-qa-tg
 
+# Optional capacity provider for generic linux instances
+AWS_LINUX_GENERIC_CAPACITY_PROVIDER=
+
 # Should be Specified only if AWS_TARGET_GROUP is empty
 E3S_URL=
 ```
 
-> NOTE: AS you not using windows images, it CAPACITY_PROVIDER is commented and not used.
+> NOTE: If you do not use Windows images, keep `AWS_WIN_CAPACITY_PROVIDER` commented.
+
+This example is for ECS bridge network mode (`main` and `main-local`).
+For AWS VPC network mode (`awsvpc-main-local`), remove `USE_PUBLIC_IP`.
+Set `SECURITY_GROUPS` and `SUBNET` as shown in the [AWS VPC migration guide](awsvpc-migration/ESG%20awsvpc%20migration%20guide.md).
 
 ##### 3. Scaler.env
 
@@ -400,11 +435,18 @@ You just need to specify LOST_TASK_COOLDOWN_TIMEOUT, recommended value is 24h.
 Example of ==task-definitions.env==.
 
 ```
-IMAGE_REPOSITORIES=Zebrunner:chrome,firefox,edge,redroid,windows-chrome,windows-edge,cypress-chrome,cypress-chromium,cypress-edge,cypress-firefox
+IMAGE_REPOSITORIES=Zebrunner:chrome,firefox,edge,windows-chrome,windows-edge,cypress-chrome,cypress-chromium,cypress-edge,cypress-firefox,playwright
 EXCLUDE_BROWSERS=
 ```
 
-You need to specify by your self what images you needed for your tasks (copy from previous machine).
+Set the repositories that you need for your tasks.
+The default list includes `playwright`.
+Do not add Redroid or Android emulator images. ESG does not support that platform.
+
+##### 5. Data.env
+
+On `main`, set `CACHE_REMOTE=true` when you use a remote cache.
+On `main-local` and `awsvpc-main-local`, the default `CACHE_REMOTE` value is `false`.
 ___
 ### (Optional) Database migration
 

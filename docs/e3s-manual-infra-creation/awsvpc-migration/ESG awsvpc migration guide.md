@@ -112,6 +112,11 @@ aws ecs put-account-setting \
 
 ### 5. Update Configuration Files
 
+The `awsvpc-main-local` branch contains the AWS VPC configuration for
+latest version. For a new install, check out that branch.
+
+For an existing install, update the files as shown below.
+
 1.  SSH into your **ESG server EC2 instance**.
 
 2.  Navigate to the following directory:
@@ -124,7 +129,7 @@ aws ecs put-account-setting \
 
     ```bash
     # AWSVPC settings
-    # SUBNET AND SECURITY_GROUPS formating example: SECURITY_GROUPS=sg-1,sg-2 and SUBNET=subnet-1
+    # Format: SECURITY_GROUPS=sg-1,sg-2 and SUBNET=subnet-1
     SECURITY_GROUPS=sg-1,sg-2
     SUBNET=subnet-1
     ```
@@ -133,6 +138,8 @@ aws ecs put-account-setting \
         Auto Scaling Group's launch template.
     -   Set `SUBNET` to the subnet you selected in the **Adjust Auto
         Scaling Group** step.
+    -   Remove `USE_PUBLIC_IP` from `router.env`. The AWS VPC line does
+        not use this variable.
 
 4.  Return to the parent directory:
 
@@ -140,8 +147,11 @@ aws ecs put-account-setting \
     cd ..
     ```
 
-5.  Open the **docker-compose.yaml** file and update all image versions
-    to `3.1.5-awsvpc`.
+5.  Open the **docker-compose.yaml** file and set these image tags:
+
+    -   `public.ecr.aws/zebrunner/task-definitions:<version>-awsvpc`
+    -   `public.ecr.aws/zebrunner/scaler:<version>-awsvpc`
+    -   `public.ecr.aws/zebrunner/router:<version>-awsvpc`
 
 ------------------------------------------------------------------------
 
