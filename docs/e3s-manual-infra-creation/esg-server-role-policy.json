@@ -1,0 +1,94 @@
+{
+    "Statement": [
+        {
+            "Action": [
+                "ecs:RegisterTaskDefinition",
+                "ecs:ListTasks",
+                "ec2:DescribeInstances",
+                "ec2:DescribeInstanceStatus",
+                "ec2:DescribeInstanceTypes",
+                "elasticloadbalancing:DescribeTargetGroups",
+                "elasticloadbalancing:DescribeLoadBalancers",
+                "elasticloadbalancing:DescribeListeners",
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeAutoScalingInstances"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Sid": "WithoutConstraints"
+        },
+        {
+            "Action": [
+                "ecs:DescribeContainerInstances",
+                "ecs:DescribeTasks",
+                "ecs:StopTask",
+                "ecs:DescribeClusters",
+                "ecs:ListContainerInstances",
+                "ecs:RunTask",
+                "ecs:DescribeCapacityProviders",
+                "ecs:UpdateContainerInstancesState"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:ecs:<REGION>:<ACCOUNT_ID>:container-instance/<ZEBRUNNER_ENV>-cluster/*",
+                "arn:aws:ecs:<REGION>:<ACCOUNT_ID>:task/<ZEBRUNNER_ENV>-cluster/*",
+                "arn:aws:ecs:<REGION>:<ACCOUNT_ID>:cluster/<ZEBRUNNER_ENV>-cluster",
+                "arn:aws:ecs:<REGION>:<ACCOUNT_ID>:task-definition/<ZEBRUNNER_ENV>-*",
+                "arn:aws:ecs:<REGION>:<ACCOUNT_ID>:capacity-provider/<ZEBRUNNER_ENV>-capacity-provider"
+            ],
+            "Sid": "ECS"
+        },
+        {
+            "Action": [
+                "autoscaling:TerminateInstanceInAutoScalingGroup",
+                "autoscaling:SetInstanceProtection",
+                "autoscaling:SetDesiredCapacity"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:autoscaling:<REGION>:<ACCOUNT_ID>:autoScalingGroup:*:autoScalingGroupName/<ZEBRUNNER_ENV>-asg",
+            "Sid": "Autoscaling"
+        },
+        {
+            "Action": [
+                "elasticloadbalancing:RegisterTargets",
+                "elasticloadbalancing:DeregisterTargets"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:elasticloadbalancing:<REGION>:<ACCOUNT_ID>:targetgroup/<ZEBRUNNER_ENV>-tg*",
+            "Sid": "ELB"
+        },
+        {
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::<ZEBRUNNER_ENV>-bucket",
+                "arn:aws:s3:::<ZEBRUNNER_ENV>-bucket/*"
+            ],
+            "Sid": "S3"
+        },
+        {
+            "Action": [
+                "iam:passRole"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:iam::<ACCOUNT_ID>:role/<ZEBRUNNER_ENV>-task-role",
+            "Sid": "IAM"
+        },
+        {
+            "Action": [
+                "ssm:UpdateInstanceInformation",
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Sid": "SSM"
+        }
+    ],
+    "Version": "2012-10-17"
+}

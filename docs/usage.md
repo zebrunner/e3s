@@ -2,16 +2,31 @@
 
 > To create aws infrastructure refer to [e3s-terraform-deploy](https://github.com/zebrunner/e3s-terraform-deploy) repository.
 
-To be able to configure and start/down/manage e3s services:
+## Deployment branches
+
+Select one Git branch before you start the services.
+
+| Branch | Data layer | Task network | Image tag |
+| ---------------------- | ---------------------------------------------- | ---------- | --------------- |
+| `main` | Remote. Default `CACHE_REMOTE` is `true`. | ECS bridge | `3.2.3` |
+| `main-local` | Local. Default `CACHE_REMOTE` is `false`. | ECS bridge | `3.2.3` |
+| `awsvpc-main-local` | Local. Default `CACHE_REMOTE` is `false`. | AWS VPC | `3.2.3-awsvpc` |
+
+The AWS VPC branch requires `SECURITY_GROUPS` and `SUBNET` in `router.env`.
+Do not set `USE_PUBLIC_IP` on the AWS VPC branch.
+
+To configure and start or stop E3S services:
 
 1. Clone this repository to e3s server instance
    ```
    git clone https://github.com/zebrunner/e3s.git && cd e3s
    ```
 
-2. Replace all {Env}, {Account}, {Region}, {S3-bucket} vars in config.env and router.env files
+2. Check out one of these branches: `main`, `main-local`, or `awsvpc-main-local`.
 
-3. Configure any other variable in config.env, router.env, scaler.env, data.env and task-definitions.env if needed
+3. Replace all {Env}, {Account}, {Region}, {S3-bucket} vars in config.env and router.env files
+
+4. Configure any other variable in config.env, router.env, scaler.env, data.env and task-definitions.env if needed
 
 
 ## E3S server configuration
@@ -27,6 +42,8 @@ To be able to configure and start/down/manage e3s services:
 * AWS_REGION={Region}
 * AWS_CLUSTER=e3s-{Env}
 * AWS_TASK_ROLE=e3s-{Env}-task-role
+* S3_BUCKET={S3-bucket}
+* S3_REGION={Region}
 * ZEBRUNNER_ENV={Env}
 
 ##### Optional variables
@@ -43,7 +60,9 @@ To be able to configure and start/down/manage e3s services:
 * ECS_TASK_DEFINITION_TAGS - Optional ECS task definition tags in `key=value` comma-separated format.
 * ZEBRUNNER_HOST - Optional Zebrunner Testing Platform host.
 * ZEBRUNNER_INTEGRATION_USER / ZEBRUNNER_INTEGRATION_PASSWORD - Optional credentials for Zebrunner integration.
-* Helper container image overrides - Optional full image URLs that replace the built-in defaults (leave empty to keep the default): `UPLOADER_IMAGE`, `MITM_IMAGE`, `RECORDER_IMAGE`, `CYPRESS_RECORDER_IMAGE`, `CLONE_IMAGE`, `ENTRYPOINT_IMAGE`, `MAVEN_IMAGE`, `WIN_UPLOADER_IMAGE`, `WIN_RECORDER_IMAGE`.
+* Helper container image overrides - Optional full image URLs that replace the built-in defaults.
+  Leave these variables empty to keep the defaults:
+  `UPLOADER_IMAGE`, `MITM_IMAGE`, `RECORDER_IMAGE`, `CYPRESS_RECORDER_IMAGE`, `CLONE_IMAGE`, `ENTRYPOINT_IMAGE`, `MAVEN_IMAGE`, `WIN_UPLOADER_IMAGE`, and `WIN_RECORDER_IMAGE`.
 * GENERIC_EXECUTOR_IMAGE_PROFILES - Optional JSON map of generic executor profiles to image name matchers. Example: `{"maven":["openjdk21","mavenjdk"],"playwright":["node","playwright"]}`.
 
 #### Scaler.env
@@ -62,13 +81,20 @@ To be able to configure and start/down/manage e3s services:
 * AWS_LINUX_CAPACITY_PROVIDER=e3s-{Env}-capacityprovider
 * AWS_WIN_CAPACITY_PROVIDER=e3s-{Env}-win-capacityprovider
 * AWS_TARGET_GROUP=e3s-{Env}-tg
-* S3_BUCKET={S3-bucket}
-* S3_REGION={Region}
+
+AWS VPC (`awsvpc-main-local`) also requires these variables:
+
+* SECURITY_GROUPS=sg-1,sg-2
+* SUBNET=subnet-1
+
+The AWS VPC configuration requires one subnet. Configure the Auto Scaling Group to use the same subnet as `SUBNET`.
+
+The security groups must permit traffic from the E3S server to the task ports.
 
 ##### Optional variables
 
 * API_ACCESS_KEY - API access key for router authorization.
-* USE_PUBLIC_IP=true/false. Default value = false
+* USE_PUBLIC_IP=true/false. Default value = false. Use this variable only on `main` and `main-local`. Do not set it on `awsvpc-main-local`.
 * SERVICE_STARTUP_TIMEOUT - Task and session startup timeout in time.Duration format. Default value = 10 min
 * SESSION_DELETE_TIMEOUT - Session delete timeout in time.Duration format. Default value = 30 sec
 * AWS_LINUX_GENERIC_CAPACITY_PROVIDER – Optional capacity provider that allows using a separate ASG for generic tasks. Default value = "".
@@ -82,14 +108,22 @@ To be able to configure and start/down/manage e3s services:
 * POSTGRES_PASSWORD - Password of user, passed in DATABASE var
 * DATABASE - Address to postgres
 * ELASTIC_CACHE - Address to redis
-* CACHE_REMOTE - Enables/disables remote cache usage. Default value = false
+* CACHE_REMOTE - Enables/disables remote cache usage. Default value on `main` is `true`. Default value on `main-local` and `awsvpc-main-local` is `false`.
 * DEFINITIONS_CONNECTION - Address to task-definitions service
 
 #### Task-definitions.env
 
 ##### Required variables
 
-* IMAGE_REPOSITORIES - Repositories with supported browsers. Valid names: `chrome`, `firefox`, `edge`, `windows-chrome`, `windows-edge`, `cypress-chrome`, `cypress-chromium`, `cypress-edge`, `cypress-firefox`, `playwright`. The default list includes `playwright`.
+* IMAGE_REPOSITORIES - Repositories with supported browsers.
+  Valid names:
+
+  ```text
+  chrome,firefox,edge,windows-chrome,windows-edge,windows-firefox,cypress-chrome,cypress-chromium,cypress-edge,cypress-firefox,playwright,chrome-auto-update,edge-auto-update,firefox-auto-update
+  ```
+
+  The default list includes `playwright`.
+  Redroid and Android emulator images are not supported.
 
 ##### Optional variables
 
@@ -175,7 +209,7 @@ Capabilities could be passed one by one as map{string:any} with prefix `zebrunne
 
 Or as map{string:map{string:any}}, where the key in the first map should be `zebrunner:options`, and simple keys in the second. Example -  `map{"zebrunner:options": map{"enableVNC":true, "enableVideo":false, "mitm":"false"}}`.
 
-If the same capability but with different values were passed by prefix and map options, value usage priority will be given to the capability with prefix.
+If both formats set the same capability, ESG uses the value from the prefixed capability.
 
 #### Supported list
 
@@ -212,7 +246,9 @@ If the same capability but with different values were passed by prefix and map o
 
 ##### Playwright capabilities
 
-Playwright desktop browsers run on the `playwright` platform (`platformName=playwright`). The session has no WebDriver endpoint: it is created with `POST /wd/hub/session` and the returned `sessionId` is used to attach over WebSocket at `/ws/playwright/<sessionId>`.
+Playwright desktop browsers run on the `playwright` platform (`platformName=playwright`).
+Create the session with `POST /wd/hub/session`.
+Use the returned `sessionId` to connect through WebSocket at `/ws/playwright/<sessionId>`.
 
 * `browserName` - Required. Value type: string. Supported: `chromium`, `chrome`, `edge`, `firefox`, `webkit`. `chrome` and `edge` resolve to `chromium` (the image ships no branded channels).
 * `playwrightVersion` - Required. Value type: string. Playwright release used as the image tag (there is no `latest` tag). Example: `1.58.2`. `browserVersion` is accepted as a legacy alias.
