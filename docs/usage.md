@@ -196,7 +196,7 @@ If the same capability but with different values were passed by prefix and map o
 
 * `enableVNC` - Default: true. Value type: bool/string. Enables vnc for session.
 * `enableVideo` - Default: true. Value type: bool/string. Enables video recording.
-  ESG gives recorder and uploader sidecars 60 seconds to complete artifact processing during ECS task shutdown.
+  ESG gives recorder and uploader sidecars up to 60 seconds to complete artifact processing during ECS task shutdown.
 * `screenResolution` - Default: 1920x1080x24. Value type: string. Determines session screen resolution. Could be passed only as full or short resolution format. Min screen resolution is 40x30. Max aspect ratio is 1:6 or 6:1.
 * `videoScreenSize` - Default: value from screenResolution. Value type: string. Determines recording screen resolution. Cannot be higher than actual screen resolution. Max total pixels: 3_000_000 (example: 1920x1080=2_073_600).
 * `frameRate` - Default: 12. Value type: integer/string. Determines video recorder fps. Value could be set between 1 and 30 fps.
