@@ -98,7 +98,15 @@ aws ecs put-account-setting \
 
   rule-10   sgr-xxxxxx11   IPv4       All TCP  TCP        9090       `<ESG_SERVER_IP/32>`
 
+  rule-11   sgr-xxxxxx12   IPv4       All TCP  TCP        5555       `<ESG_SERVER_IP/32>`
+
+  rule-12   sgr-xxxxxx13   IPv4       All TCP  TCP        5556       `<ESG_SERVER_IP/32>`
+
+  rule-13   sgr-xxxxxx14   IPv4       All TCP  TCP        9222       `<ESG_SERVER_IP/32>`
+
   -----------------------------------------------------------------------------------------
+
+Playwright tasks use these extra ports. Port 5555 is the Playwright server. Port 5556 is the supervisor. Port 9222 is the browser debug port. The other Playwright ports are already in this list: 5900, 8080, 9080, and 9090.
 
 > **Important:**\
 > Replace `<ESG_SERVER_IP/32>` with your actual ESG server IP address
